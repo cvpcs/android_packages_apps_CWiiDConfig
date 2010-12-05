@@ -1,6 +1,8 @@
 package org.cvpcs.android.cwiidconfig.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,9 +14,15 @@ import android.widget.Toast;
 import org.cvpcs.android.cwiidconfig.R;
 
 import org.cvpcs.android.cwiidconfig.daemon.CWiiDManager;
+import org.cvpcs.android.cwiidconfig.daemon.CWiiDStarter;
+import org.cvpcs.android.cwiidconfig.daemon.CWiiDStopper;
 
 public class CWiiDConfig extends Activity {
-	private static boolean POWER_ON = false;
+	private static final int BT_ENABLE_FOR_DAEMON_START_RESULT = 1;
+	
+	private static boolean mPowerOn = false;
+	private static String mCurrentConfig = "buttons";
+	private static BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
 	/** Called when the activity is first created. */
 	@Override
@@ -24,7 +32,6 @@ public class CWiiDConfig extends Activity {
 
 		// retrieve all of our needed views
 		final ImageButton power_toggle = (ImageButton)findViewById(R.id.main_power_toggle_button);
-		final TextView power_toggle_text = (TextView)findViewById(R.id.main_power_toggle_text);
 		final ImageButton load_preset = (ImageButton)findViewById(R.id.main_load_preset_button);
 		final ImageView wiimote_view = (ImageView)findViewById(R.id.main_wiimote_view);
 
@@ -51,34 +58,48 @@ public class CWiiDConfig extends Activity {
 			}
 		});
 	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		updateDaemonStatus();
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch(requestCode) {
+			case BT_ENABLE_FOR_DAEMON_START_RESULT:
+				if(resultCode == RESULT_OK && mBluetoothAdapter.isEnabled()) {
+					// we have bluetooth! start daemon!
+					CWiiDStarter.show(getWindow().getContext(), mCurrentConfig);
+				} else {
+					
+				}
+				break;
+			default:
+				break;
+		}
+	}
 
+	/**
+	 * Toggle power on/off, performing the appropriate UI interactions in the process
+	 */
 	private void togglePower() {
-		CWiiDManager.State state = CWiiDManager.State.UNKNOWN;
-
-		if (POWER_ON) {
-			CWiiDManager.stopDaemon();
-
-			do {
-				try {
-					Thread.sleep(500);
-				} catch(Exception e) {}
-
-				state = CWiiDManager.getState();
-			} while(state != CWiiDManager.State.STOPPED &&
-				state != CWiiDManager.State.STOPPING &&
-				state != CWiiDManager.State.ERROR);
+		
+		if (mPowerOn) {
+			// just stop the daemon
+			CWiiDStopper.show(getWindow().getContext());
 		} else {
-			CWiiDManager.startDaemon("buttons");
-
-			do {
-				try {
-					Thread.sleep(500);
-				} catch(Exception e) {}
-
-				state = CWiiDManager.getState();
-			} while(state != CWiiDManager.State.READY &&
-				state != CWiiDManager.State.DISCOVERING &&
-				state != CWiiDManager.State.ERROR);
+			// first we verify that bluetooth has started
+			if (!mBluetoothAdapter.isEnabled()) {
+				// bluetooth isn't enabled, so request the user to enable it
+				// if we get bluetooth, then we'll start the daemon
+			    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+			    startActivityForResult(enableBtIntent, BT_ENABLE_FOR_DAEMON_START_RESULT);
+			} else {
+				// bluetooth already enabled, just start
+				CWiiDStarter.show(getWindow().getContext(), mCurrentConfig);
+			}
 		}
 	}
 
@@ -88,12 +109,12 @@ public class CWiiDConfig extends Activity {
 
 		if (CWiiDManager.getState() == CWiiDManager.State.STOPPED ||
 		    CWiiDManager.getState() == CWiiDManager.State.STOPPING) {
-			POWER_ON = false;
+			mPowerOn = false;
 		} else {
-			POWER_ON = true;
+			mPowerOn = true;
 		}
 
-		if (POWER_ON) {
+		if (mPowerOn) {
 			power_toggle.setImageResource(R.drawable.ic_menu_power_on);
 			power_toggle_text.setText(R.string.power_off_text);
 		} else {

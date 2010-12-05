@@ -42,6 +42,12 @@ public class CWiiDManager {
 		SystemProperties.set(CTRL_PROPERTY, "0");
 	}
 
+	public static void zapDaemon() {
+		stopDaemon();
+		
+		SystemProperties.set(STATE_PROPERTY, STATE_STOPPED);
+	}
+	
 	public static State getState() {
 		// get the cwiid state, assumed stopped if it doesn't exist
 		String state = SystemProperties.get(STATE_PROPERTY, STATE_STOPPED);

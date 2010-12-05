@@ -10,4 +10,11 @@
 	<string name="load_preset">Load Preset</string>
 	<string name="load_preset_empty">Could not find any presets for you to load.</string>
 	<string name="delete_text">Delete</string>
+	
+	<string name="cwiid_initializing">Initializing CWiiD ...</string>
+	<string name="cwiid_discovering">Please put your WiiMote into discoverable mode (Press 1+2) ...</string>
+	<string name="cwiid_ready">Your WiiMote is now connected.</string>
+	<string name="cwiid_stopping">Stopping CwiiD ...</string>
+	<string name="cwiid_stopped">CWiiD stopped.</string>
+	<string name="cwiid_error">There was an error starting CWiiD.</string>
 </resources>
