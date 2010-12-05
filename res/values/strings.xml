@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">CWiiDConfig</string>
+	<string name="app_name">CWiiDConfig</string>
+	<string name="select_device">Select a device to configure:</string>
+	<string name="power_on_text">Start CWiiD</string>
+	<string name="power_off_text">Stop CWiiD</string>
+	<string name="load_preset_text">Load</string>
+	<string name="save_preset_text">Save</string>
+
+	<string name="load_preset">Load Preset</string>
+	<string name="load_preset_empty">Could not find any presets for you to load.</string>
+	<string name="delete_text">Delete</string>
 </resources>

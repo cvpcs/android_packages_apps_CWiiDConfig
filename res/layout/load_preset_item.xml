@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/load_preset_item_main_layout"
+	android:background="#FFFFFF"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<ImageButton android:id="@+id/load_preset_item_load_button"
+		android:src="@android:drawable/ic_menu_upload"
+		android:layout_alignParentRight="true"
+		android:layout_alignParentTop="true"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginRight="2dip"
+		android:layout_marginTop="5dip" />
+
+	<TextView android:id="@+id/load_preset_item_load_text"
+		android:text="@string/load_preset_text"
+		android:textColor="#666666"
+		android:textSize="18dip"
+		android:gravity="center"
+		android:layout_below="@id/load_preset_item_load_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignLeft="@id/load_preset_item_load_button"
+		android:layout_alignRight="@id/load_preset_item_load_button"
+		android:layout_marginTop="-5dip" />
+
+	<ImageButton android:id="@+id/load_preset_item_delete_button"
+		android:src="@android:drawable/ic_menu_delete"
+		android:layout_below="@id/load_preset_item_load_text"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentRight="true"
+		android:layout_marginRight="2dip" />
+
+	<TextView android:id="@+id/load_preset_item_delete_text"
+		android:text="@string/delete_text"
+		android:textColor="#666666"
+		android:textSize="18dip"
+		android:gravity="center"
+		android:layout_below="@id/load_preset_item_delete_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignLeft="@id/load_preset_item_delete_button"
+		android:layout_alignRight="@id/load_preset_item_delete_button"
+		android:layout_marginTop="-5dip" />
+
+	<TextView android:id="@+id/load_preset_item_title"
+		android:text="My Preset"
+		android:textColor="#555555"
+		android:textSize="25dip"
+		android:layout_toLeftOf="@id/load_preset_item_load_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentLeft="true"
+		android:layout_marginLeft="10dip"
+		android:layout_marginRight="10dip"
+		android:layout_marginTop="10dip" />
+
+	<TextView android:id="@+id/load_preset_item_summary"
+		android:text="This is a summary of the preset that was specified above.  It can be used for lots of various stuffs and whatnot lorum ipsum!"
+		android:textColor="#777777"
+		android:textSize="18dip"
+		android:layout_below="@id/load_preset_item_title"
+		android:layout_toLeftOf="@id/load_preset_item_load_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentLeft="true"
+		android:layout_marginBottom="10dip"
+		android:layout_marginLeft="10dip"
+		android:layout_marginRight="10dip"
+		android:layout_marginTop="5dip" />
+
+</RelativeLayout>
