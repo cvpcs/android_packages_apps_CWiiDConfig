@@ -1,8 +1,11 @@
-package org.cvpcs.android.cwiidconfig;
+package org.cvpcs.android.cwiidconfig.daemon;
+
+import android.os.SystemProperties;
 
 public class CWiiDManager {
 	public static final String CTRL_PROPERTY = "service.gem.cwiid.on";
 	public static final String STATE_PROPERTY = "service.gem.cwiid.status";
+	public static final String CONF_PROPERTY = "sys.gem.cwiid.conf";
 
 	public static enum State {
 		INITIALIZING,
@@ -23,18 +26,25 @@ public class CWiiDManager {
 	private static final String STATE_STOPPED = "stopped";
 	private static final String STATE_ERROR = "error";
 
-	public static void startDaemon() {
-		// set CTRL_PROPERTY = 1
+	public static void startDaemon(String config) {
+		// set our configuration
+		SystemProperties.set(CONF_PROPERTY, config);
+
+		// reset our state to stopped
+		SystemProperties.set(STATE_PROPERTY, STATE_STOPPED);
+
+		// signal the system to start
+		SystemProperties.set(CTRL_PROPERTY, "1");
 	}
 
 	public static void stopDaemon() {
-		// set CTRL_PROPERTY = 0
+		// signal the system to stop
+		SystemProperties.set(CTRL_PROPERTY, "0");
 	}
 
 	public static State getState() {
-		String state = "";
-
-		// retrieve STATUS_PROPERTY
+		// get the cwiid state, assumed stopped if it doesn't exist
+		String state = SystemProperties.get(STATE_PROPERTY, STATE_STOPPED);
 
 		if(state.equals(STATE_INITIALIZING)) {
 			return State.INITIALIZING;
