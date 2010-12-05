@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import org.cvpcs.android.cwiidconfig.R;
 
+import org.cvpcs.android.cwiidconfig.daemon.CWiiDManager;
+
 public class CWiiDConfig extends Activity {
 	private static boolean POWER_ON = false;
 
@@ -20,24 +22,22 @@ public class CWiiDConfig extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
+		// retrieve all of our needed views
 		final ImageButton power_toggle = (ImageButton)findViewById(R.id.main_power_toggle_button);
 		final TextView power_toggle_text = (TextView)findViewById(R.id.main_power_toggle_text);
 		final ImageButton load_preset = (ImageButton)findViewById(R.id.main_load_preset_button);
 		final ImageView wiimote_view = (ImageView)findViewById(R.id.main_wiimote_view);
+
+		// read in the status of the daemon and alter the display accordingly
+		updateDaemonStatus();
 
 		power_toggle.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				// actually turn CWiiD on/off
 				togglePower();
 
-				// toggle our image/text
-				if (POWER_ON) {
-					power_toggle.setImageResource(R.drawable.ic_menu_power_on);
-					power_toggle_text.setText(R.string.power_off_text);
-				} else {
-					power_toggle.setImageResource(R.drawable.ic_menu_power_off);
-					power_toggle_text.setText(R.string.power_on_text);
-				}
+				// update our views
+				updateDaemonStatus();
 			}
 		});
 		load_preset.setOnClickListener(new View.OnClickListener() {
@@ -52,13 +52,53 @@ public class CWiiDConfig extends Activity {
 		});
 	}
 
-	public void togglePower() {
+	private void togglePower() {
+		CWiiDManager.State state = CWiiDManager.State.UNKNOWN;
+
 		if (POWER_ON) {
-			// step 1: kill cwiid
+			CWiiDManager.stopDaemon();
+
+			do {
+				try {
+					Thread.sleep(500);
+				} catch(Exception e) {}
+
+				state = CWiiDManager.getState();
+			} while(state != CWiiDManager.State.STOPPED &&
+				state != CWiiDManager.State.STOPPING &&
+				state != CWiiDManager.State.ERROR);
 		} else {
-			// step 1: save current config
-			// step 2: start cwiid
-			// step 3: connect wiimote
+			CWiiDManager.startDaemon("buttons");
+
+			do {
+				try {
+					Thread.sleep(500);
+				} catch(Exception e) {}
+
+				state = CWiiDManager.getState();
+			} while(state != CWiiDManager.State.READY &&
+				state != CWiiDManager.State.DISCOVERING &&
+				state != CWiiDManager.State.ERROR);
+		}
+	}
+
+	private void updateDaemonStatus() {
+		final ImageButton power_toggle = (ImageButton)findViewById(R.id.main_power_toggle_button);
+		final TextView power_toggle_text = (TextView)findViewById(R.id.main_power_toggle_text);
+
+		if (CWiiDManager.getState() == CWiiDManager.State.STOPPED ||
+		    CWiiDManager.getState() == CWiiDManager.State.STOPPING) {
+			POWER_ON = false;
+		} else {
+			POWER_ON = true;
+		}
+
+		if (POWER_ON) {
+			power_toggle.setImageResource(R.drawable.ic_menu_power_on);
+			power_toggle_text.setText(R.string.power_off_text);
+		} else {
+			power_toggle.setImageResource(R.drawable.ic_menu_power_off);
+			power_toggle_text.setText(R.string.power_on_text);
 		}
 	}
 }
