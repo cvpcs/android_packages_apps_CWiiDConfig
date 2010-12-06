@@ -31,13 +31,7 @@ public class Preset implements Comparable {
 	public boolean canDelete() { return (mPresetFile.exists() && mPresetFile.canWrite()); }
 	public Config getConfig() {
 		if(mConfig == null) {
-			if(mPresetFile.exists()) {
-				mConfig = ConfigManager.load(mPresetFile);
-			}
-			
-			if(mConfig == null) {
-				mConfig = new Config();
-			}
+			loadConfig();
 		}
 
 		// overwrite our name/summary
@@ -47,8 +41,16 @@ public class Preset implements Comparable {
 		return mConfig;
 	}
 	
-	public void reloadConfig() {
+	public void loadConfig() {
 		mConfig = null;
+
+		if(mPresetFile.exists()) {
+			mConfig = ConfigManager.load(mPresetFile);
+		}
+	
+		if(mConfig == null) {
+			mConfig = new Config();
+		}
 	}
 	
 	public void save() {

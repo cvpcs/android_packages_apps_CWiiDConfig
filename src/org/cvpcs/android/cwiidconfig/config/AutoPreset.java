@@ -16,6 +16,8 @@ public class AutoPreset extends Preset {
 	
 	protected AutoPreset() {
 		super(AUTO_PRESET_FILE);
+
+		loadConfig();
 	}
 	
 	public void save() {

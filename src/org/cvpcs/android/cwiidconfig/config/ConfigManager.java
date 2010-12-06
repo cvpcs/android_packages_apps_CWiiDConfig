@@ -335,6 +335,7 @@ public class ConfigManager {
 		try {
 			bw = new BufferedWriter(new FileWriter(file));
 			config.save(bw);
+			bw.close();
 		} catch (IOException e) {
 			return false;
 		}
@@ -352,6 +353,7 @@ public class ConfigManager {
 		try {
 			br = new BufferedReader(new FileReader(file));
 			config = new Config(br);
+			br.close();
 		} catch (IOException e) {
 			return null;
 		}

@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Nunchuck {
-	private static Pattern nunchuckPattern = Pattern.compile(
-			"(nunchuck|plugin.nunchuck_stick2btn).([a-z0-9_]+)=([a-z0-9_]+)",
+public class Nunchuk {
+	private static Pattern nunchukPattern = Pattern.compile(
+			"(nunchuk|plugin.nunchuk_stick2btn)\\.([a-z0-9_]+)[ \t]*=[ \t]*([a-z0-9_]+)",
 			Pattern.CASE_INSENSITIVE);
 	
 	private int buttonC = 0;
@@ -16,7 +16,7 @@ public class Nunchuck {
 	private int buttonDown = 0;
 	private int buttonLeft = 0;
 	private int buttonRight = 0;
-	private Matcher nunchuckMatcher;
+	private Matcher nunchukMatcher;
 
 	public void setButtonC(int keysym) {
 		buttonC = keysym;
@@ -71,10 +71,10 @@ public class Nunchuck {
 		    line.charAt(0) == '#') {
 			return false;
 		}
-		nunchuckMatcher = nunchuckPattern.matcher(line);
-		if (nunchuckMatcher.find()) {
-			String button = nunchuckMatcher.group(2);
-			String value = nunchuckMatcher.group(3);
+		nunchukMatcher = nunchukPattern.matcher(line);
+		if (nunchukMatcher.find()) {
+			String button = nunchukMatcher.group(2);
+			String value = nunchukMatcher.group(3);
 			setButtonValue(button, value);
 			return true;
 		} else {
@@ -84,22 +84,22 @@ public class Nunchuck {
 	
 	public void save(BufferedWriter bw) throws IOException {
 		if (buttonC != 0) {
-			bw.write("Nunchuck.C=" + ConfigManager.convertKeysym(buttonC) + "\n");
+			bw.write("Nunchuk.C=" + ConfigManager.convertKeysym(buttonC) + "\n");
 		}
 		if (buttonZ != 0) {
-			bw.write("Nunchuck.Z=" + ConfigManager.convertKeysym(buttonZ) + "\n");
+			bw.write("Nunchuk.Z=" + ConfigManager.convertKeysym(buttonZ) + "\n");
 		}
 		if (buttonUp != 0) {
-			bw.write("Plugin.nunchuck_stick2btn.Up=" + ConfigManager.convertKeysym(buttonUp) + "\n");
+			bw.write("Plugin.nunchuk_stick2btn.Up=" + ConfigManager.convertKeysym(buttonUp) + "\n");
 		}
 		if (buttonDown != 0) {
-			bw.write("Plugin.nunchuck_stick2btn.Down=" + ConfigManager.convertKeysym(buttonDown) + "\n");
+			bw.write("Plugin.nunchuk_stick2btn.Down=" + ConfigManager.convertKeysym(buttonDown) + "\n");
 		}
 		if (buttonLeft != 0) {
-			bw.write("Plugin.nunchuck_stick2btn.Left=" + ConfigManager.convertKeysym(buttonLeft) + "\n");
+			bw.write("Plugin.nunchuk_stick2btn.Left=" + ConfigManager.convertKeysym(buttonLeft) + "\n");
 		}
 		if (buttonRight != 0) {
-			bw.write("Plugin.nunchuck_stick2btn.Right=" + ConfigManager.convertKeysym(buttonRight) + "\n");
+			bw.write("Plugin.nunchuk_stick2btn.Right=" + ConfigManager.convertKeysym(buttonRight) + "\n");
 		}
 	}
 	

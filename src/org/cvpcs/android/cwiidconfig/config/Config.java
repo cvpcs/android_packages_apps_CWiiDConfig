@@ -8,14 +8,14 @@ public class Config {
 	private String name;
 	private String summary;
 	private Wiimote wiimote;
-	private Nunchuck nunchuck;
+	private Nunchuk nunchuk;
 	private ClassicController classicController;
 	
 	public Config() {
 		name = "";
 		summary = "";
 		wiimote = new Wiimote();
-		nunchuck = new Nunchuck();
+		nunchuk = new Nunchuk();
 		classicController = new ClassicController();
 	}
 	
@@ -23,7 +23,7 @@ public class Config {
 		name = "";
 		summary = "";
 		wiimote = new Wiimote();
-		nunchuck = new Nunchuck();
+		nunchuk = new Nunchuk();
 		classicController = new ClassicController();
 		load(br);
 	}
@@ -40,8 +40,8 @@ public class Config {
 		return wiimote;
 	}
 	
-	public Nunchuck getNunchuck() {
-		return nunchuck;
+	public Nunchuk getNunchuk() {
+		return nunchuk;
 	}
 	
 	public ClassicController getClassicController() {
@@ -80,7 +80,7 @@ public class Config {
 			bw.write("#summary=" + summary + "\n");
 		}
 		wiimote.save(bw);
-		nunchuck.save(bw);
+		nunchuk.save(bw);
 		classicController.save(bw);
 	}
 	
@@ -89,7 +89,7 @@ public class Config {
 		while ((line = br.readLine()) != null) {
 			if (!wiimote.readLine(line)) {
 				if (!classicController.readLine(line)) {
-					if (!nunchuck.readLine(line)) {
+					if (!nunchuk.readLine(line)) {
 						if (!readLine(line)) {
 							// unhandled line
 						}

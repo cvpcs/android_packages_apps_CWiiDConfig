@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class ClassicController {
 	private static Pattern classicControllerPattern = Pattern.compile(
-			"classic.([a-z0-9_]+)=([a-z0-9_]+)",
+			"classic\\.([a-z0-9_]+)[ \t]*=[ \t]*([a-z0-9_]+)",
 			Pattern.CASE_INSENSITIVE);
 	
 	private int buttonA = 0;

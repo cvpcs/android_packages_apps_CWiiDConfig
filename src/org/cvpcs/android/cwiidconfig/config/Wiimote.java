@@ -6,7 +6,7 @@ import java.util.regex.*;
 
 public class Wiimote {
 	private static Pattern wiimotePattern = Pattern.compile(
-			"wiimote.([a-z0-9_]+)=([a-z0-9_]+)",
+			"wiimote\\.([a-z0-9_]+)[ \t]*=[ \t]*([a-z0-9_]+)",
 			Pattern.CASE_INSENSITIVE);
 	
 	private int buttonA = 0;
