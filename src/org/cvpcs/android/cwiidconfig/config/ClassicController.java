@@ -148,7 +148,7 @@ public class ClassicController {
 	}
 	
 	public boolean readLine(String line) {
-		if (line.length <= 0 ||
+		if (line.length() <= 0 ||
 		    line.charAt(0) == '#') {
 			return false;
 		}
