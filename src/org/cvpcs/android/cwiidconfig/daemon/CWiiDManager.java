@@ -3,9 +3,9 @@ package org.cvpcs.android.cwiidconfig.daemon;
 import android.os.SystemProperties;
 
 public class CWiiDManager {
-	public static final String CTRL_PROPERTY = "service.gem.cwiid.on";
-	public static final String STATE_PROPERTY = "service.gem.cwiid.status";
-	public static final String CONF_PROPERTY = "sys.gem.cwiid.conf";
+	public static final String CTRL_PROPERTY = "gem.cwiid.on";
+	public static final String STATE_PROPERTY = "gem.cwiid.status";
+	public static final String CONF_PROPERTY = "persist.gem.cwiid.conf";
 
 	public static enum State {
 		INITIALIZING,
