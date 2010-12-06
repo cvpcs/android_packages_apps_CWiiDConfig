@@ -19,6 +19,7 @@
 	<!--  Load preset activity -->
 	<string name="load_preset_empty">Could not find any presets for you to load.</string>
 	<string name="delete_text">Delete</string>
+	<string name="system_preset">(System Preset)</string>
 	
 	<!-- Configure Wiimote activity -->
 	<string name="config_wiimote_button">Button</string>

@@ -7,10 +7,10 @@ import java.lang.Comparable;
 import java.util.HashMap;
 
 public class Preset implements Comparable {
-	private String mName;
-	private String mSummary;
-	private File mPresetFile;
-	private Config mConfig;
+	protected String mName;
+	protected String mSummary;
+	protected File mPresetFile;
+	protected Config mConfig;
 
 	public Preset(File f) {
 		mPresetFile = f;
@@ -25,6 +25,8 @@ public class Preset implements Comparable {
 
 	public String getName() { return mName; }
 	public String getSummary() { return mSummary; }
+	public File getFile() { return mPresetFile; }
+	
 	public boolean isValid() { return (mPresetFile.exists() && mPresetFile.canRead()); }
 	public boolean canDelete() { return (mPresetFile.exists() && mPresetFile.canWrite()); }
 	public Config getConfig() {
@@ -43,6 +45,10 @@ public class Preset implements Comparable {
 		mConfig.setSummary((mSummary == null ? "" : mSummary));
 		
 		return mConfig;
+	}
+	
+	public void reloadConfig() {
+		mConfig = null;
 	}
 	
 	public void save() {
@@ -109,5 +115,23 @@ public class Preset implements Comparable {
 		Preset another_preset = (Preset)another;
 
 		return mName.compareTo(another_preset.getName());
+	}
+	
+	public boolean equals(Object o) {
+		if(o == null) return false;
+		if(!Preset.class.isInstance(o)) return false;
+		
+		Preset other = (Preset)o;
+		
+		return (mPresetFile.getName().equals(convertNameToFilename(other.getName())));
+	}
+	
+	public int hashCode() {
+		return mPresetFile.getName().hashCode();
+	}
+	
+	protected String convertNameToFilename(String name) {
+		// we only accept characters that are awesome
+		return name.replaceAll("[^0-9A-Za-z]", "_");
 	}
 }

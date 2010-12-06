@@ -4,10 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class PresetManager {
-	private static File AUTO_PRESET_FILE = new File("/sdcard/.cwiid/wminput/.autopreset");
-	private static Preset AUTO_PRESET = new Preset(AUTO_PRESET_FILE);
-	
+public class PresetManager {	
 	// directories we know cwiid will scan for config files
 	private static File[] PRESET_SCAN_DIRECTORIES = {
 		new File("/system/etc/cwiid/wminput"),
@@ -23,6 +20,8 @@ public class PresetManager {
 
 		PRESETS.clear();
 
+		Preset auto = AutoPreset.getAutoPreset();
+		
 		// scan the known config directories for presets
 		for(File config_dir : PRESET_SCAN_DIRECTORIES) {
 			// sanity check
@@ -38,7 +37,7 @@ public class PresetManager {
 				}
 				
 				// ignore auto-preset config
-				if(config_file.equals(AUTO_PRESET_FILE)) {
+				if(config_file.equals(auto.getFile())) {
 					continue;
 				}
 
@@ -67,9 +66,5 @@ public class PresetManager {
 		} else {
 			return null;
 		}
-	}
-	
-	public static Preset getAutoPreset() {
-		return AUTO_PRESET;
 	}
 }

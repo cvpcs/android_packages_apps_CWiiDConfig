@@ -69,6 +69,7 @@ public class ConfigWiimote extends Activity {
 		final Spinner key_spinner = (Spinner)findViewById(R.id.config_wiimote_keybutton);
 		
 		mWiiAdapter = new ArrayAdapter<CharSequence>(this, R.layout.sexy_combo, WIIMOTE_BUTTONS);
+		mWiiAdapter.setDropDownViewResource(R.layout.sexy_combo_dropdown);
 		wii_spinner.setAdapter(mWiiAdapter);
 		wii_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view,
@@ -82,6 +83,7 @@ public class ConfigWiimote extends Activity {
 		});
 		
 		mKeyAdapter = new ArrayAdapter<CharSequence>(this, R.layout.sexy_combo, ANDROID_KEYS);
+		mKeyAdapter.setDropDownViewResource(R.layout.sexy_combo_dropdown);
 		key_spinner.setAdapter(mKeyAdapter);
 		key_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view,

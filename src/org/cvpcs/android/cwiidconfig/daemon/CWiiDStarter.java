@@ -12,6 +12,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
+import org.cvpcs.android.cwiidconfig.activity.CWiiDConfig;
+import org.cvpcs.android.cwiidconfig.config.Preset;
+
 public class CWiiDStarter implements Runnable {
 	private static final int PDHANDLER_SLEEP_MSG = 0;
 	private static final int PDHANDLER_DISMISS_MSG = 1;
@@ -22,7 +25,8 @@ public class CWiiDStarter implements Runnable {
 	private static Thread mStarterThread = null;
 	
 	private Context mContext;
-	private String mConfig;
+	private Preset mPreset;
+	private Handler mDaemonHandler;
 	
 	// this is used to send progress dialog updates on the UI layer
 	private static Handler mProgressHandler = new Handler() {
@@ -53,7 +57,7 @@ public class CWiiDStarter implements Runnable {
 		}
 	};
 	
-	public static void show(Context ctx, String config) {
+	public static void show(Context ctx, Preset preset, Handler daemonHandler) {
 		// create our progress dialog
 		mProgressDialog = new ProgressDialog(ctx);
 		mProgressDialog.setIndeterminate(true);
@@ -72,21 +76,25 @@ public class CWiiDStarter implements Runnable {
 		mProgressDialog.setMessage(ctx.getString(R.string.cwiid_initializing));
 		mProgressDialog.show();
 		
-		mStarterThread = new Thread(new CWiiDStarter(ctx, config));
+		mStarterThread = new Thread(new CWiiDStarter(ctx, preset, daemonHandler));
 		mStarterThread.start();
 	}
 	
-	public CWiiDStarter(Context ctx, String config) {
+	public CWiiDStarter(Context ctx, Preset preset, Handler daemonHandler) {
 		mContext = ctx;
-		mConfig = config;
+		mPreset = preset;
+		mDaemonHandler = daemonHandler;
 	}
 	
 	public void run() {
 		// stock state
 		CWiiDManager.State state = CWiiDManager.State.UNKNOWN;
 		
+		// save the preset out to file before starting cwiid
+		mPreset.save();
+		
 		// start the daemon
-		CWiiDManager.startDaemon(mConfig);
+		CWiiDManager.startDaemon(mPreset.getFile().getName());
 		
 		// keep looping until we either finish or error out
 		while(state != CWiiDManager.State.READY &&
@@ -135,5 +143,12 @@ public class CWiiDStarter implements Runnable {
 		} catch(Exception e) { }
 		
 		mProgressHandler.sendEmptyMessage(PDHANDLER_DISMISS_MSG);
+		
+		// update UI thread
+		if(state == CWiiDManager.State.READY) {
+			mDaemonHandler.sendEmptyMessage(CWiiDConfig.DAEMON_STARTED_MSG);
+		} else {
+			mDaemonHandler.sendEmptyMessage(CWiiDConfig.DAEMON_ERROR_MSG);
+		}
 	}
 }

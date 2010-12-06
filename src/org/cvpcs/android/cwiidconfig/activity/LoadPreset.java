@@ -56,9 +56,11 @@ public class LoadPreset extends ListActivity {
 			final ImageButton load = (ImageButton)v.findViewById(R.id.load_preset_item_load_button);
 			final ImageButton delete = (ImageButton)v.findViewById(R.id.load_preset_item_delete_button);
 			final TextView delete_text = (TextView)v.findViewById(R.id.load_preset_item_delete_text);
-
+			final TextView system_text = (TextView)v.findViewById(R.id.load_preset_item_system_text);
+			
 			load.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
+					CWiiDConfig.mAutoPreset.loadFromPreset(preset);
 					finish();
 				}
 			});
@@ -95,7 +97,7 @@ public class LoadPreset extends ListActivity {
 			if(!preset.canDelete()) {
 				delete.setVisibility(View.GONE);
 				delete_text.setVisibility(View.GONE);
-
+				system_text.setVisibility(View.VISIBLE);
 			}
 
 			return v;

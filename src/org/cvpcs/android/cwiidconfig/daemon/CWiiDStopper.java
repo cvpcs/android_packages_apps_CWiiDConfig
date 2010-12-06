@@ -3,6 +3,7 @@ package org.cvpcs.android.cwiidconfig.daemon;
 import java.lang.Thread;
 
 import org.cvpcs.android.cwiidconfig.R;
+import org.cvpcs.android.cwiidconfig.activity.CWiiDConfig;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -22,6 +23,7 @@ public class CWiiDStopper implements Runnable {
 	private static Thread mStopperThread = null;
 	
 	private Context mContext;
+	private Handler mDaemonHandler;
 	
 	// this is used to send progress dialog updates on the UI layer
 	private static Handler mProgressHandler = new Handler() {
@@ -52,7 +54,7 @@ public class CWiiDStopper implements Runnable {
 		}
 	};
 	
-	public static void show(Context ctx) {
+	public static void show(Context ctx, Handler daemonHandler) {
 		// create our progress dialog
 		mProgressDialog = new ProgressDialog(ctx);
 		mProgressDialog.setIndeterminate(true);
@@ -60,12 +62,13 @@ public class CWiiDStopper implements Runnable {
 		mProgressDialog.setMessage(ctx.getString(R.string.cwiid_stopping));
 		mProgressDialog.show();
 		
-		mStopperThread = new Thread(new CWiiDStopper(ctx));
+		mStopperThread = new Thread(new CWiiDStopper(ctx, daemonHandler));
 		mStopperThread.start();
 	}
 	
-	public CWiiDStopper(Context ctx) {
+	public CWiiDStopper(Context ctx, Handler daemonHandler) {
 		mContext = ctx;
+		mDaemonHandler = daemonHandler;
 	}
 	
 	public void run() {
@@ -118,5 +121,12 @@ public class CWiiDStopper implements Runnable {
 		} catch(Exception e) { }
 		
 		mProgressHandler.sendEmptyMessage(PDHANDLER_DISMISS_MSG);
+		
+		// update main UI thread
+		if(state == CWiiDManager.State.STOPPED) {
+			mDaemonHandler.sendEmptyMessage(CWiiDConfig.DAEMON_STOPPED_MSG);
+		} else {
+			mDaemonHandler.sendEmptyMessage(CWiiDConfig.DAEMON_ERROR_MSG);
+		}
 	}
 }
