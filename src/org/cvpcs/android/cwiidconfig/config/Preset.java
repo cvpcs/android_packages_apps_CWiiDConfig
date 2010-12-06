@@ -7,30 +7,52 @@ import java.lang.Comparable;
 import java.util.HashMap;
 
 public class Preset implements Comparable {
-	// a map from device button <-> key
-	private HashMap<String, String> map;
-	private String name;
-	private String summary;
-	private File presetFile;
+	private String mName;
+	private String mSummary;
+	private File mPresetFile;
+	private Config mConfig;
 
 	public Preset(File f) {
-		map = new HashMap<String, String>();
+		mPresetFile = f;
 
-		presetFile = f;
-
-		name = presetFile.getName();
-		summary = null;
+		mName = mPresetFile.getName();
+		mSummary = null;
+		mConfig = null;
 
 		// attempt to load metadata
 		loadMetadata();
 	}
 
-	public String getName() { return name; }
-	public String getSummary() { return summary; }
-	public boolean isValid() { return (presetFile.exists() && presetFile.canRead()); }
-	public boolean canDelete() { return (presetFile.exists() && presetFile.canWrite()); }
+	public String getName() { return mName; }
+	public String getSummary() { return mSummary; }
+	public boolean isValid() { return (mPresetFile.exists() && mPresetFile.canRead()); }
+	public boolean canDelete() { return (mPresetFile.exists() && mPresetFile.canWrite()); }
+	public Config getConfig() {
+		if(mConfig == null) {
+			if(mPresetFile.exists()) {
+				mConfig = ConfigManager.load(mPresetFile);
+			}
+			
+			if(mConfig == null) {
+				mConfig = new Config();
+			}
+		}
 
-	public void save() {}
+		// overwrite our name/summary
+		mConfig.setName(mName);
+		mConfig.setSummary((mSummary == null ? "" : mSummary));
+		
+		return mConfig;
+	}
+	
+	public void save() {
+		if(mConfig != null) {
+			mConfig.setName(mName);
+			mConfig.setSummary((mSummary == null ? "" : mSummary));
+			ConfigManager.save(mConfig, mPresetFile);
+		}
+	}
+	
 	public boolean delete() {
 		if(!canDelete()) {
 			return false;
@@ -39,22 +61,26 @@ public class Preset implements Comparable {
 		boolean was_deleted = false;
 
 		try {
-			was_deleted = presetFile.delete();
+			was_deleted = mPresetFile.delete();
 		} catch(SecurityException e) {
 			// if we got here, then we were not allowed to delete due to security
 			e.printStackTrace();
+		}
+		
+		if(was_deleted) {
+			mConfig = null;
 		}
 
 		return was_deleted;
 	}
 
 	private void loadMetadata() {
-		if(!presetFile.exists() || !presetFile.isFile() || !presetFile.canRead()) {
+		if(!mPresetFile.exists() || !mPresetFile.isFile() || !mPresetFile.canRead()) {
 			return;
 		}
 
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(presetFile));
+			BufferedReader br = new BufferedReader(new FileReader(mPresetFile));
 
 			String line = null;
 			while((line = br.readLine()) != null) {
@@ -65,9 +91,9 @@ public class Preset implements Comparable {
 
 				// now begin parsing metadata
 				if(line.indexOf("#name=") == 0 && line.length() > 6) {
-					name = line.substring(6);
+					mName = line.substring(6);
 				} else if(line.indexOf("#summary=") == 0 && line.length() > 9) {
-					summary = line.substring(9);
+					mSummary = line.substring(9);
 				}
 			}
 
@@ -82,6 +108,6 @@ public class Preset implements Comparable {
 	public int compareTo(Object another) {
 		Preset another_preset = (Preset)another;
 
-		return name.compareTo(another_preset.getName());
+		return mName.compareTo(another_preset.getName());
 	}
 }

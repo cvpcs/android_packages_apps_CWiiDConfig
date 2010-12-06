@@ -109,6 +109,6 @@ public class LoadPreset extends ListActivity {
 
 		PresetManager.scanPresets();
 
-		getListView().setAdapter(new PresetAdapter(getWindow().getContext()));
+		getListView().setAdapter(new PresetAdapter(this));
 	}
 }

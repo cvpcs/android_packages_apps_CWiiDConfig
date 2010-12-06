@@ -44,8 +44,6 @@ public class CWiiDStopper implements Runnable {
 						if(newMessage != null) {
 							mProgressDialog.setMessage(newMessage);
 						}
-						
-						mProgressDialog.show();
 					}
 					break;
 				default:

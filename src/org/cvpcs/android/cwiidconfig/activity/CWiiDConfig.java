@@ -21,7 +21,7 @@ public class CWiiDConfig extends Activity {
 	private static final int BT_ENABLE_FOR_DAEMON_START_RESULT = 1;
 	
 	private static boolean mPowerOn = false;
-	private static String mCurrentConfig = "buttons";
+	public static String mCurrentConfig = "buttons";
 	private static BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
 	/** Called when the activity is first created. */
@@ -54,7 +54,7 @@ public class CWiiDConfig extends Activity {
 		});
 		wiimote_view.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Toast.makeText(v.getContext(), "ROFL YOU CLICKED ME!", 2000).show();
+				startActivity(new Intent(v.getContext(), ConfigWiimote.class));
 			}
 		});
 	}
@@ -71,7 +71,7 @@ public class CWiiDConfig extends Activity {
 			case BT_ENABLE_FOR_DAEMON_START_RESULT:
 				if(resultCode == RESULT_OK && mBluetoothAdapter.isEnabled()) {
 					// we have bluetooth! start daemon!
-					CWiiDStarter.show(getWindow().getContext(), mCurrentConfig);
+					CWiiDStarter.show(this, mCurrentConfig);
 				} else {
 					
 				}
@@ -88,7 +88,7 @@ public class CWiiDConfig extends Activity {
 		
 		if (mPowerOn) {
 			// just stop the daemon
-			CWiiDStopper.show(getWindow().getContext());
+			CWiiDStopper.show(this);
 		} else {
 			// first we verify that bluetooth has started
 			if (!mBluetoothAdapter.isEnabled()) {
@@ -98,7 +98,7 @@ public class CWiiDConfig extends Activity {
 			    startActivityForResult(enableBtIntent, BT_ENABLE_FOR_DAEMON_START_RESULT);
 			} else {
 				// bluetooth already enabled, just start
-				CWiiDStarter.show(getWindow().getContext(), mCurrentConfig);
+				CWiiDStarter.show(this, mCurrentConfig);
 			}
 		}
 	}

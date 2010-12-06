@@ -45,8 +45,6 @@ public class CWiiDStarter implements Runnable {
 						if(newMessage != null) {
 							mProgressDialog.setMessage(newMessage);
 						}
-						
-						mProgressDialog.show();
 					}
 					break;
 				default:
