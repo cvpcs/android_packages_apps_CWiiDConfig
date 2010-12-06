@@ -290,6 +290,7 @@ public class ConfigManager {
 		ANDROID_KEYS.add("Home");
 		ANDROID_KEYS.add("Search");
 		ANDROID_KEYS.add("Camera");
+		ANDROID_KEYS.add("Menu");
 		// Volume-related
 		ANDROID_KEYS.add("Mute");
 		ANDROID_KEYS.add("Volume Up");
@@ -831,13 +832,13 @@ public class ConfigManager {
 		}
 	}
 	
-	public static String convertHRToKeySym(String hrString) {		
-		return "KEY_" + hrString.toUpperCase()
-							.replace("ESCAPE", "ESC")
-							.replace("EQUALS", "EQUAL")
-							.replace("NUMPAD", "KP")
-							.replace(" ", "")
-							.replace("/", "");
+	public static int convertHRToKeySym(String hrString) {		
+		return convertString("KEY_" + hrString.toUpperCase()
+								.replace("ESCAPE", "ESC")
+								.replace("EQUALS", "EQUAL")
+								.replace("NUMPAD", "KP")
+								.replace(" ", "")
+								.replace("/", ""));
 	}
 
 	/**

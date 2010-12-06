@@ -2,9 +2,37 @@ package org.cvpcs.android.cwiidconfig.config;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.*;
 
 public class Wiimote {
+	public static final String WIIMOTE_BUTTON_UP 		= "Up";
+	public static final String WIIMOTE_BUTTON_LEFT		= "Left";
+	public static final String WIIMOTE_BUTTON_RIGHT		= "Right";
+	public static final String WIIMOTE_BUTTON_DOWN		= "Down";
+	public static final String WIIMOTE_BUTTON_A			= "A";
+	public static final String WIIMOTE_BUTTON_B			= "B";
+	public static final String WIIMOTE_BUTTON_MINUS		= "Minus";
+	public static final String WIIMOTE_BUTTON_HOME		= "Home";
+	public static final String WIIMOTE_BUTTON_PLUS		= "Plus";
+	public static final String WIIMOTE_BUTTON_1			= "1";
+	public static final String WIIMOTE_BUTTON_2			= "2";
+	
+	public static final ArrayList<CharSequence> WIIMOTE_BUTTONS = new ArrayList<CharSequence>();
+	static {
+		WIIMOTE_BUTTONS.add(WIIMOTE_BUTTON_UP);
+		WIIMOTE_BUTTONS.add(WIIMOTE_BUTTON_LEFT);
+		WIIMOTE_BUTTONS.add(WIIMOTE_BUTTON_RIGHT);
+		WIIMOTE_BUTTONS.add(WIIMOTE_BUTTON_DOWN);
+		WIIMOTE_BUTTONS.add(WIIMOTE_BUTTON_A);
+		WIIMOTE_BUTTONS.add(WIIMOTE_BUTTON_B);
+		WIIMOTE_BUTTONS.add(WIIMOTE_BUTTON_MINUS);
+		WIIMOTE_BUTTONS.add(WIIMOTE_BUTTON_HOME);
+		WIIMOTE_BUTTONS.add(WIIMOTE_BUTTON_PLUS);
+		WIIMOTE_BUTTONS.add(WIIMOTE_BUTTON_1);
+		WIIMOTE_BUTTONS.add(WIIMOTE_BUTTON_2);
+	}
+
 	private static Pattern wiimotePattern = Pattern.compile(
 			"wiimote\\.([a-z0-9_]+)[ \t]*=[ \t]*([a-z0-9_]+)",
 			Pattern.CASE_INSENSITIVE);
@@ -108,6 +136,60 @@ public class Wiimote {
 	
 	public int getButtonRight() {
 		return buttonRight;
+	}
+	
+	public void setButton(String button, int keysym) {
+		if (button.equalsIgnoreCase(WIIMOTE_BUTTON_A)) {
+			setButtonA(keysym);
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_B)) {
+			setButtonB(keysym);
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_1)) {
+			setButton1(keysym);
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_2)) {
+			setButton2(keysym);
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_PLUS)) {
+			setButtonPlus(keysym);
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_MINUS)) {
+			setButtonMinus(keysym);
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_HOME)) {
+			setButtonHome(keysym);
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_UP)) {
+			setButtonUp(keysym);
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_DOWN)) {
+			setButtonDown(keysym);
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_LEFT)) {
+			setButtonLeft(keysym);
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_RIGHT)) {
+			setButtonRight(keysym);
+		}
+	}
+	
+	public int getButton(String button) {
+		if (button.equalsIgnoreCase(WIIMOTE_BUTTON_A)) {
+			return getButtonA();
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_B)) {
+			return getButtonB();
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_1)) {
+			return getButton1();
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_2)) {
+			return getButton2();
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_PLUS)) {
+			return getButtonPlus();
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_MINUS)) {
+			return getButtonMinus();
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_HOME)) {
+			return getButtonHome();
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_UP)) {
+			return getButtonUp();
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_DOWN)) {
+			return getButtonDown();
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_LEFT)) {
+			return getButtonLeft();
+		} else if (button.equalsIgnoreCase(WIIMOTE_BUTTON_RIGHT)) {
+			return getButtonRight();
+		} else {
+			return 0;
+		}
 	}
 	
 	public boolean readLine(String line) {
