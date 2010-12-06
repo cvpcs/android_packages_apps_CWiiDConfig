@@ -57,7 +57,8 @@ public class Config {
 	}
 	
 	private boolean readLine(String line) {
-		if (line.charAt(0) != '#') {
+		if (line.length <= 0 ||
+		    line.charAt(0) != '#') {
 			return false;
 		}
 		if (line.indexOf("#name=") == 0 && line.length() > 6) {

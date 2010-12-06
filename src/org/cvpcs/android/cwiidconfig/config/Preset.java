@@ -91,7 +91,8 @@ public class Preset implements Comparable {
 			String line = null;
 			while((line = br.readLine()) != null) {
 				// first make sure we are dealing with a comment
-				if(line.charAt(0) != '#') {
+				if(line.length() <= 0 ||
+				   line.charAt(0) != '#') {
 					continue;
 				}
 
