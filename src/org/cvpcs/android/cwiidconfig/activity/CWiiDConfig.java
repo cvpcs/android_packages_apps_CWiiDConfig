@@ -17,6 +17,7 @@ import org.cvpcs.android.cwiidconfig.R;
 
 import org.cvpcs.android.cwiidconfig.config.AutoPreset;
 import org.cvpcs.android.cwiidconfig.daemon.CWiiDManager;
+import org.cvpcs.android.cwiidconfig.daemon.CWiiDDaemonService;
 import org.cvpcs.android.cwiidconfig.daemon.CWiiDStarter;
 import org.cvpcs.android.cwiidconfig.daemon.CWiiDStopper;
 
@@ -34,13 +35,20 @@ public class CWiiDConfig extends Activity {
 		public void handleMessage(Message msg) {
 			switch(msg.what) {
 				case DAEMON_STARTED_MSG:
+					// start our service
+					CWiiDConfig.this.startService(new Intent(CWiiDDaemonService.ACTION_INTENT));
+					break;
 				case DAEMON_STOPPED_MSG:
 				case DAEMON_ERROR_MSG:
+					// kill service if stopped or error
+					CWiiDConfig.this.stopService(new Intent(CWiiDDaemonService.ACTION_INTENT));
+					break;
 				default:
-					// herp derp
-					updateDaemonStatus();
 					break;
 			}
+
+			// update our status
+			updateDaemonStatus();
 		}
 	};
 	

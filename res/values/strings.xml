@@ -31,4 +31,8 @@
 	<string name="cwiid_stopping">Stopping CwiiD ...</string>
 	<string name="cwiid_stopped">CWiiD stopped.</string>
 	<string name="cwiid_error">There was an error starting CWiiD.</string>
+
+	<!-- CWiiD Daemon service -->
+	<string name="cwiid_daemon_service_title">CWiiD Service</string>
+	<string name="cwiid_daemon_service_text">The CWiiD daemon is currently running.</string>
 </resources>
