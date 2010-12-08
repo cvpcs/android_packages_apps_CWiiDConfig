@@ -22,6 +22,9 @@
 			android:label="@string/load_preset"
 			android:screenOrientation="portrait">
 		</activity>
+		<activity android:name=".activity.SavePreset"
+			android:label="@string/save_preset">
+		</activity>
 		<activity android:name=".activity.ConfigWiimote"
 			android:label="@string/config_wiimote"
 			android:screenOrientation="portrait">

@@ -2,6 +2,7 @@
 <resources>
 	<string name="app_name">CWiiDConfig</string>
 	<string name="load_preset">Load Preset</string>
+	<string name="save_preset">Save Preset</string>
 	<string name="config_wiimote">Configure WiiMote</string>
 	<string name="config_nunchuk">Configure Nunchuk</string>
 	<string name="config_classic">Configure Classic Controller</string>
@@ -14,17 +15,21 @@
 	<string name="config_button">Button</string>
 	<string name="config_key">Key Mapping</string>
 	
-	
+	<string name="power_on">Start CWiiD</string>
+	<string name="power_off">Stop CWiiD</string>
+	<string name="load">Load</string>
+	<string name="save">Save</string>
+	<string name="cancel">Cancel</string>
+	<string name="delete">Delete</string>
+
+	<string name="preset_name">Preset name:</string>
+	<string name="preset_description">Description:</string>
+
 	<!-- Main activity -->
-	<string name="power_on_text">Start CWiiD</string>
-	<string name="power_off_text">Stop CWiiD</string>
-	<string name="load_preset_text">Load</string>
-	<string name="save_preset_text">Save</string>
         <string name="main_daemon_notif">The CWiiD daemon is currently running and therefore you cannot alter its configuration.  To modify the CWiiD configuration, please first stop the currently running daemon.</string>
 
 	<!--  Load preset activity -->
 	<string name="load_preset_empty">Could not find any presets for you to load.</string>
-	<string name="delete_text">Delete</string>
 	<string name="system_preset">(System Preset)</string>
 	
 	<string name="cwiid_initializing">Initializing CWiiD ...</string>

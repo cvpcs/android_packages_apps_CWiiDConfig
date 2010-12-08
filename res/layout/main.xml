@@ -26,7 +26,7 @@
 		android:layout_marginBottom="30dip" />
 
 	<TextView android:id="@+id/main_load_preset_text"
-		android:text="@string/load_preset_text"
+		android:text="@string/load"
 		android:textColor="#555555"
 		android:gravity="center"
 		android:layout_below="@id/main_load_preset_button"
@@ -46,7 +46,7 @@
 		android:layout_marginBottom="30dip" />
 
 	<TextView android:id="@+id/main_save_preset_text"
-		android:text="@string/save_preset_text"
+		android:text="@string/save"
 		android:textColor="#555555"
 		android:gravity="center"
 		android:layout_below="@id/main_save_preset_button"
@@ -65,7 +65,7 @@
 		android:layout_marginRight="20dip"
 		android:layout_marginBottom="30dip" />
 	<TextView android:id="@+id/main_power_toggle_text"
-		android:text="@string/power_on_text"
+		android:text="@string/power_on"
 		android:textColor="#555555"
 		android:gravity="center"
 		android:layout_below="@id/main_power_toggle_button"
@@ -112,7 +112,7 @@
 	<TextView android:id="@+id/main_daemon_running_text"
 		android:text="@string/main_daemon_notif"
 		android:textColor="#777777"
-                android:textSize="18dip"
+		android:textSize="18dip"
 		android:gravity="center"
 		android:layout_centerInParent="true"
 		android:layout_width="fill_parent"

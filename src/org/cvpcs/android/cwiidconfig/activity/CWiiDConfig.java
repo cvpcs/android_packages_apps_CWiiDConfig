@@ -66,6 +66,7 @@ public class CWiiDConfig extends Activity {
 		// retrieve all of our needed views
 		final ImageButton power_toggle = (ImageButton)findViewById(R.id.main_power_toggle_button);
 		final ImageButton load_preset = (ImageButton)findViewById(R.id.main_load_preset_button);
+		final ImageButton save_preset = (ImageButton)findViewById(R.id.main_save_preset_button);
 		final ImageView wiimote_view = (ImageView)findViewById(R.id.main_wiimote_view);
 		final ImageView nunchuk_view = (ImageView)findViewById(R.id.main_nunchuk_view);
 		final ImageView classic_view = (ImageView)findViewById(R.id.main_classic_view);
@@ -85,6 +86,11 @@ public class CWiiDConfig extends Activity {
 		load_preset.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent(v.getContext(), LoadPreset.class));
+			}
+		});
+		save_preset.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				startActivity(new Intent(v.getContext(), SavePreset.class));
 			}
 		});
 		wiimote_view.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +175,7 @@ public class CWiiDConfig extends Activity {
 
 		if (mPowerOn) {
 			power_toggle.setImageResource(R.drawable.ic_menu_power_on);
-			power_toggle_text.setText(R.string.power_off_text);
+			power_toggle_text.setText(R.string.power_off);
 			
 			load_preset.setEnabled(false);
 			save_preset.setEnabled(false);
@@ -188,7 +194,7 @@ public class CWiiDConfig extends Activity {
 			daemon_running_text.setVisibility(View.VISIBLE);
 		} else {
 			power_toggle.setImageResource(R.drawable.ic_menu_power_off);
-			power_toggle_text.setText(R.string.power_on_text);
+			power_toggle_text.setText(R.string.power_on);
 
 			
 			load_preset.setEnabled(true);
