@@ -24,10 +24,7 @@ public class ConfigWiimote extends Activity {
 		ANDROID_KEYS.add("[ Unmapped ]");
 		ANDROID_KEYS.addAll(ConfigManager.ANDROID_KEYS);
 	}
-	
-	private int mPosition;
-	private String mSelection;
-	
+
 	private ArrayAdapter<CharSequence> mWiiAdapter;
 	private ArrayAdapter<CharSequence> mKeyAdapter;
 	
@@ -138,8 +135,16 @@ public class ConfigWiimote extends Activity {
 		} else if(button.equals(Wiimote.WIIMOTE_BUTTON_2)) {
 			setImageButton(1, R.drawable.wiimote_button_2);
 		} else {
-			setImageButton(0, 0);
+			setImageButton();
 		}
+	}
+	
+	private void setImageButton() {
+		final ImageView wiimote_front_button = (ImageView)findViewById(R.id.config_wiimote_front_view_button);
+		final ImageView wiimote_back_button = (ImageView)findViewById(R.id.config_wiimote_back_view_button);
+
+		wiimote_front_button.setVisibility(View.GONE);
+		wiimote_back_button.setVisibility(View.GONE);
 	}
 	
 	private void setImageButton(int which, int resId) {
@@ -161,8 +166,7 @@ public class ConfigWiimote extends Activity {
 			wiimote_back_button.setVisibility(View.VISIBLE);
 			wiimote_front_button.setVisibility(View.GONE);
 		} else {
-			wiimote_front_button.setVisibility(View.GONE);
-			wiimote_back_button.setVisibility(View.GONE);
+			setImageButton();
 		}
 	}
 }

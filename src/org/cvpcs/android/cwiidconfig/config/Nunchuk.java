@@ -2,10 +2,28 @@ package org.cvpcs.android.cwiidconfig.config;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Nunchuk {
+	public static final String NUNCHUK_BUTTON_UP 		= "Up";
+	public static final String NUNCHUK_BUTTON_LEFT		= "Left";
+	public static final String NUNCHUK_BUTTON_RIGHT		= "Right";
+	public static final String NUNCHUK_BUTTON_DOWN		= "Down";
+	public static final String NUNCHUK_BUTTON_C			= "C";
+	public static final String NUNCHUK_BUTTON_Z			= "Z";
+	
+	public static final ArrayList<CharSequence> NUNCHUK_BUTTONS = new ArrayList<CharSequence>();
+	static {
+		NUNCHUK_BUTTONS.add(NUNCHUK_BUTTON_UP);
+		NUNCHUK_BUTTONS.add(NUNCHUK_BUTTON_LEFT);
+		NUNCHUK_BUTTONS.add(NUNCHUK_BUTTON_RIGHT);
+		NUNCHUK_BUTTONS.add(NUNCHUK_BUTTON_DOWN);
+		NUNCHUK_BUTTONS.add(NUNCHUK_BUTTON_C);
+		NUNCHUK_BUTTONS.add(NUNCHUK_BUTTON_Z);
+	}
+	
 	private static Pattern nunchukPattern = Pattern.compile(
 			"(nunchuk|plugin.nunchuk_stick2btn)\\.([a-z0-9_]+)[ \t]*=[ \t]*([a-z0-9_]+)",
 			Pattern.CASE_INSENSITIVE);
@@ -64,6 +82,40 @@ public class Nunchuk {
 	
 	public int getButtonRight() {
 		return buttonRight;
+	}
+	
+	public void setButton(String button, int keysym) {
+		if (button.equalsIgnoreCase(NUNCHUK_BUTTON_C)) {
+			setButtonC(keysym);
+		} else if (button.equalsIgnoreCase(NUNCHUK_BUTTON_Z)) {
+			setButtonZ(keysym);
+		} else if (button.equalsIgnoreCase(NUNCHUK_BUTTON_UP)) {
+			setButtonUp(keysym);
+		} else if (button.equalsIgnoreCase(NUNCHUK_BUTTON_DOWN)) {
+			setButtonDown(keysym);
+		} else if (button.equalsIgnoreCase(NUNCHUK_BUTTON_LEFT)) {
+			setButtonLeft(keysym);
+		} else if (button.equalsIgnoreCase(NUNCHUK_BUTTON_RIGHT)) {
+			setButtonRight(keysym);
+		}
+	}
+	
+	public int getButton(String button) {
+		if (button.equalsIgnoreCase(NUNCHUK_BUTTON_C)) {
+			return getButtonC();
+		} else if (button.equalsIgnoreCase(NUNCHUK_BUTTON_Z)) {
+			return getButtonZ();
+		} else if (button.equalsIgnoreCase(NUNCHUK_BUTTON_UP)) {
+			return getButtonUp();
+		} else if (button.equalsIgnoreCase(NUNCHUK_BUTTON_DOWN)) {
+			return getButtonDown();
+		} else if (button.equalsIgnoreCase(NUNCHUK_BUTTON_LEFT)) {
+			return getButtonLeft();
+		} else if (button.equalsIgnoreCase(NUNCHUK_BUTTON_RIGHT)) {
+			return getButtonRight();
+		} else {
+			return 0;
+		}
 	}
 	
 	public boolean readLine(String line) {

@@ -2,10 +2,46 @@ package org.cvpcs.android.cwiidconfig.config;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ClassicController {
+	public static final String CLASSIC_BUTTON_UP 		= "Up";
+	public static final String CLASSIC_BUTTON_LEFT		= "Left";
+	public static final String CLASSIC_BUTTON_RIGHT		= "Right";
+	public static final String CLASSIC_BUTTON_DOWN		= "Down";
+	public static final String CLASSIC_BUTTON_A			= "A";
+	public static final String CLASSIC_BUTTON_B			= "B";
+	public static final String CLASSIC_BUTTON_X			= "X";
+	public static final String CLASSIC_BUTTON_Y			= "Y";
+	public static final String CLASSIC_BUTTON_MINUS		= "Minus";
+	public static final String CLASSIC_BUTTON_HOME		= "Home";
+	public static final String CLASSIC_BUTTON_PLUS		= "Plus";
+	public static final String CLASSIC_BUTTON_L			= "L";
+	public static final String CLASSIC_BUTTON_R			= "R";
+	public static final String CLASSIC_BUTTON_ZL		= "ZL";
+	public static final String CLASSIC_BUTTON_ZR		= "ZR";
+	
+	public static final ArrayList<CharSequence> CLASSIC_BUTTONS = new ArrayList<CharSequence>();
+	static {
+		CLASSIC_BUTTONS.add(CLASSIC_BUTTON_UP);
+		CLASSIC_BUTTONS.add(CLASSIC_BUTTON_LEFT);
+		CLASSIC_BUTTONS.add(CLASSIC_BUTTON_RIGHT);
+		CLASSIC_BUTTONS.add(CLASSIC_BUTTON_DOWN);
+		CLASSIC_BUTTONS.add(CLASSIC_BUTTON_A);
+		CLASSIC_BUTTONS.add(CLASSIC_BUTTON_B);
+		CLASSIC_BUTTONS.add(CLASSIC_BUTTON_X);
+		CLASSIC_BUTTONS.add(CLASSIC_BUTTON_Y);
+		CLASSIC_BUTTONS.add(CLASSIC_BUTTON_MINUS);
+		CLASSIC_BUTTONS.add(CLASSIC_BUTTON_HOME);
+		CLASSIC_BUTTONS.add(CLASSIC_BUTTON_PLUS);
+		CLASSIC_BUTTONS.add(CLASSIC_BUTTON_L);
+		CLASSIC_BUTTONS.add(CLASSIC_BUTTON_R);
+		CLASSIC_BUTTONS.add(CLASSIC_BUTTON_ZL);
+		CLASSIC_BUTTONS.add(CLASSIC_BUTTON_ZR);
+	}
+	
 	private static Pattern classicControllerPattern = Pattern.compile(
 			"classic\\.([a-z0-9_]+)[ \t]*=[ \t]*([a-z0-9_]+)",
 			Pattern.CASE_INSENSITIVE);
@@ -145,6 +181,76 @@ public class ClassicController {
 	
 	public int getButtonRight() {
 		return buttonRight;
+	}
+	
+	public void setButton(String button, int keysym) {
+		if (button.equalsIgnoreCase(CLASSIC_BUTTON_A)) {
+			setButtonA(keysym);
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_B)) {
+			setButtonB(keysym);
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_X)) {
+			setButtonX(keysym);
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_Y)) {
+			setButtonY(keysym);
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_L)) {
+			setButtonL(keysym);
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_R)) {
+			setButtonR(keysym);
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_ZL)) {
+			setButtonZL(keysym);
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_ZR)) {
+			setButtonZR(keysym);
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_PLUS)) {
+			setButtonPlus(keysym);
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_MINUS)) {
+			setButtonMinus(keysym);
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_HOME)) {
+			setButtonHome(keysym);
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_UP)) {
+			setButtonUp(keysym);
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_DOWN)) {
+			setButtonDown(keysym);
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_LEFT)) {
+			setButtonLeft(keysym);
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_RIGHT)) {
+			setButtonRight(keysym);
+		}
+	}
+	
+	public int getButton(String button) {
+		if (button.equalsIgnoreCase(CLASSIC_BUTTON_A)) {
+			return getButtonA();
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_B)) {
+			return getButtonB();
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_X)) {
+			return getButtonX();
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_Y)) {
+			return getButtonY();
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_L)) {
+			return getButtonL();
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_R)) {
+			return getButtonR();
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_ZL)) {
+			return getButtonZL();
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_ZR)) {
+			return getButtonZR();
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_PLUS)) {
+			return getButtonPlus();
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_MINUS)) {
+			return getButtonMinus();
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_HOME)) {
+			return getButtonHome();
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_UP)) {
+			return getButtonUp();
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_DOWN)) {
+			return getButtonDown();
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_LEFT)) {
+			return getButtonLeft();
+		} else if (button.equalsIgnoreCase(CLASSIC_BUTTON_RIGHT)) {
+			return getButtonRight();
+		} else {
+			return 0;
+		}
 	}
 	
 	public boolean readLine(String line) {

@@ -67,6 +67,8 @@ public class CWiiDConfig extends Activity {
 		final ImageButton power_toggle = (ImageButton)findViewById(R.id.main_power_toggle_button);
 		final ImageButton load_preset = (ImageButton)findViewById(R.id.main_load_preset_button);
 		final ImageView wiimote_view = (ImageView)findViewById(R.id.main_wiimote_view);
+		final ImageView nunchuk_view = (ImageView)findViewById(R.id.main_nunchuk_view);
+		final ImageView classic_view = (ImageView)findViewById(R.id.main_classic_view);
 
 		// read in the status of the daemon and alter the display accordingly
 		updateDaemonStatus();
@@ -90,6 +92,17 @@ public class CWiiDConfig extends Activity {
 				startActivity(new Intent(v.getContext(), ConfigWiimote.class));
 			}
 		});
+		nunchuk_view.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				startActivity(new Intent(v.getContext(), ConfigNunchuk.class));
+			}
+		});
+		classic_view.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				startActivity(new Intent(v.getContext(), ConfigClassic.class));
+			}
+		});
+		
 	}
 	
 	@Override
@@ -143,8 +156,9 @@ public class CWiiDConfig extends Activity {
 		final ImageButton save_preset = (ImageButton)findViewById(R.id.main_save_preset_button);
 		final TextView save_preset_text = (TextView)findViewById(R.id.main_save_preset_text);
 		final ImageView wiimote_view = (ImageView)findViewById(R.id.main_wiimote_view);
-		final ImageView classic_view = (ImageView)findViewById(R.id.main_classic_controller_view);
+		final ImageView classic_view = (ImageView)findViewById(R.id.main_classic_view);
 		final ImageView nunchuk_view = (ImageView)findViewById(R.id.main_nunchuk_view);
+		final TextView daemon_running_text = (TextView)findViewById(R.id.main_daemon_running_text);
 
 		if (CWiiDManager.getState() == CWiiDManager.State.STOPPED ||
 		    CWiiDManager.getState() == CWiiDManager.State.ERROR) {
@@ -170,6 +184,8 @@ public class CWiiDConfig extends Activity {
 			save_preset.setVisibility(View.INVISIBLE);
 			load_preset_text.setVisibility(View.INVISIBLE);
 			save_preset_text.setVisibility(View.INVISIBLE);
+			
+			daemon_running_text.setVisibility(View.VISIBLE);
 		} else {
 			power_toggle.setImageResource(R.drawable.ic_menu_power_off);
 			power_toggle_text.setText(R.string.power_on_text);
@@ -188,6 +204,8 @@ public class CWiiDConfig extends Activity {
 			save_preset.setVisibility(View.VISIBLE);
 			load_preset_text.setVisibility(View.VISIBLE);
 			save_preset_text.setVisibility(View.VISIBLE);
+			
+			daemon_running_text.setVisibility(View.GONE);
 		}
 	}
 }

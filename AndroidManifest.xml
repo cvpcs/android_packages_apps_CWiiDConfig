@@ -26,6 +26,14 @@
 			android:label="@string/config_wiimote"
 			android:screenOrientation="portrait">
 		</activity>
+		<activity android:name=".activity.ConfigNunchuk"
+			android:label="@string/config_nunchuk"
+			android:screenOrientation="portrait">
+		</activity>
+		<activity android:name=".activity.ConfigClassic"
+			android:label="@string/config_classic"
+			android:screenOrientation="portrait">
+		</activity>
 
 		<service android:name=".daemon.CWiiDDaemonService"
 			android:exported="false"

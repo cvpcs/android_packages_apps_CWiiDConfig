@@ -87,8 +87,8 @@
 		android:layout_marginRight="10dip"
 		android:layout_marginBottom="20dip" />
 
-	<ImageView android:id="@+id/main_classic_controller_view"
-		android:src="@drawable/classic_controller_front"
+	<ImageView android:id="@+id/main_classic_view"
+		android:src="@drawable/classic_front"
 		android:layout_width="wrap_content"
 		android:layout_height="175dip"
 		android:layout_above="@id/main_load_preset_button"
@@ -100,7 +100,7 @@
 
 	<ImageView android:id="@+id/main_nunchuk_view"
 		android:src="@drawable/nunchuk_side"
-		android:layout_above="@id/main_classic_controller_view"
+		android:layout_above="@id/main_classic_view"
 		android:layout_toRightOf="@id/main_wiimote_view"
 		android:layout_below="@id/main_select_device"
 		android:layout_width="wrap_content"
@@ -108,5 +108,16 @@
 		android:layout_alignParentRight="true"
 		android:layout_marginRight="10dip"
 		android:layout_marginTop="20dip" />
+
+	<TextView android:id="@+id/main_daemon_running_text"
+		android:text="@string/main_daemon_notif"
+		android:textColor="#777777"
+                android:textSize="18dip"
+		android:gravity="center"
+		android:layout_centerInParent="true"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:visibility="gone"
+		android:layout_margin="10dip" />
 
 </RelativeLayout>
