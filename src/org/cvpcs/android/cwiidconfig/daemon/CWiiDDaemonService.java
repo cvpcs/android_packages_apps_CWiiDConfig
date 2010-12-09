@@ -43,8 +43,7 @@ public class CWiiDDaemonService extends Service {
     	String title = getString(R.string.cwiid_daemon_service_title);
     	String text = getString(R.string.cwiid_daemon_service_text);
 
-        Notification notification = new Notification(R.drawable.app_icon, text,
-                System.currentTimeMillis());
+        Notification notification = new Notification(R.drawable.app_icon, text, 0);
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
                 new Intent(this, CWiiDConfig.class), 0);

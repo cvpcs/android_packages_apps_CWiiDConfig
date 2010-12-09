@@ -15,11 +15,9 @@
 	<ListView android:id="@+id/android:list"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:divider="#555555"
 		android:fadingEdge="none"
-		android:scrollbarAlwaysDrawVerticalTrack="true"
-		android:scrollbars="vertical"
-		android:scrollbarDefaultDelayBeforeFade="3600000" />
-		<!-- herp derp -->
+		android:divider="#BBBBBB"
+		android:dividerHeight="1dip"
+		android:scrollbarAlwaysDrawVerticalTrack="true" />
 
 </FrameLayout>
