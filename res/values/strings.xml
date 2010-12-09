@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<!-- Activity titles -->
 	<string name="app_name">CWiiDConfig</string>
 	<string name="load_preset">Load Preset</string>
 	<string name="save_preset">Save Preset</string>
@@ -7,14 +8,15 @@
 	<string name="config_nunchuk">Configure Nunchuk</string>
 	<string name="config_classic">Configure Classic Controller</string>
 	
+	<!-- Commonly used strings -->
 	<string name="select_device">Select a device to configure:</string>
 	<string name="select_button">Select a button to configure:</string>
-	
 	<string name="select_button_prompt">Select a controller button:</string>
 	<string name="select_key_prompt">Select a keyboard key:</string>
 	<string name="config_button">Button</string>
 	<string name="config_key">Key Mapping</string>
 	
+	<!-- Stock strings to be used all over the floor -->
 	<string name="power_on">Start CWiiD</string>
 	<string name="power_off">Stop CWiiD</string>
 	<string name="load">Load</string>
@@ -22,6 +24,7 @@
 	<string name="cancel">Cancel</string>
 	<string name="delete">Delete</string>
 
+	<!-- Preset meta labels -->
 	<string name="preset_name">Preset name:</string>
 	<string name="preset_description">Description:</string>
 
@@ -31,7 +34,17 @@
 	<!--  Load preset activity -->
 	<string name="load_preset_empty">Could not find any presets for you to load.</string>
 	<string name="system_preset">(System Preset)</string>
+
+	<!-- Save preset activity -->
+	<string name="save_error_preset_name_empty">You must specify a preset name.</string>
+	<string name="save_error_preset_name_system">The specified name is already used by a system preset.  Please select another one.</string>
+	<string name="save_preset_overwrite_title">Overwrite Preset?</string>
+	<string name="save_preset_overwrite_msg">The specified preset exists, do you want to overwrite it?</string>
+	<string name="save_preset_overwrite_confirm">Overwrite</string>
+	<string name="save_preset_overwrite_cancel">Cancel</string>
+	<string name="save_preset_success">Preset saved successfully.</string>
 	
+	<!-- CWiiD Daemon status messages -->
 	<string name="cwiid_initializing">Initializing CWiiD ...</string>
 	<string name="cwiid_discovering">Please put your WiiMote into discoverable mode (Press 1+2) ...</string>
 	<string name="cwiid_ready">Your WiiMote is now connected.</string>

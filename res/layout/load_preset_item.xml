@@ -10,7 +10,7 @@
 		android:layout_alignParentTop="true"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginRight="2dip"
+		android:layout_marginRight="5dip"
 		android:layout_marginTop="5dip" />
 
 	<TextView android:id="@+id/load_preset_item_load_text"
@@ -31,7 +31,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentRight="true"
-		android:layout_marginRight="2dip" />
+		android:layout_marginRight="5dip" />
 
 	<TextView android:id="@+id/load_preset_item_delete_text"
 		android:text="@string/delete"
@@ -53,9 +53,9 @@
 		android:layout_height="wrap_content"
 		android:layout_alignParentTop="true"
 		android:layout_alignParentLeft="true"
-		android:layout_marginLeft="10dip"
-		android:layout_marginRight="10dip"
-		android:layout_marginTop="10dip" />
+		android:layout_marginLeft="5dip"
+		android:layout_marginRight="5dip"
+		android:layout_marginTop="2dip" />
 
 	<TextView android:id="@+id/load_preset_item_summary"
 		android:textColor="#777777"
@@ -65,10 +65,10 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentLeft="true"
-		android:layout_marginBottom="10dip"
-		android:layout_marginLeft="10dip"
-		android:layout_marginRight="10dip"
-		android:layout_marginTop="5dip" />
+		android:layout_marginBottom="2dip"
+		android:layout_marginLeft="5dip"
+		android:layout_marginRight="5dip"
+		android:layout_marginTop="2dip" />
 		
 	<TextView android:id="@+id/load_preset_item_system_text"
 		android:textColor="#999999"
@@ -78,7 +78,9 @@
 		android:layout_toLeftOf="@id/load_preset_item_load_button"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_margin="10dip"
+		android:layout_marginLeft="5dip"
+		android:layout_marginBottom="2dip"
+		android:layout_marginTop="2dip"
 		android:text="@string/system_preset"
 		android:visibility="gone" />
 

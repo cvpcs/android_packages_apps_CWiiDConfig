@@ -9,16 +9,16 @@
 	<LinearLayout android:id="@+id/save_preset_buttons"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="10dip"
-		android:layout_marginBottom="10dip"
-		android:layout_alignParentBottom="true"
-		android:layout_centerHorizontal="true"
-		android:orientation="horizontal">
+		android:layout_marginLeft="10dip"
+		android:layout_marginRight="10dip"
+		android:layout_alignParentRight="true"
+		android:layout_centerVertical="true"
+		android:orientation="vertical">
 		
 		<LinearLayout android:id="@+id/save_preset_button_save_layout"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginRight="20dip"
+			android:layout_marginBottom="20dip"
 			android:orientation="vertical">
 			
 			<ImageButton android:id="@+id/save_preset_button_save"
@@ -56,24 +56,30 @@
 	</LinearLayout>
 
 	<TextView android:id="@+id/save_preset_name_label"
-		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
 		android:layout_marginTop="10dip"
 		android:layout_alignParentTop="true"
+		android:layout_alignParentLeft="true"
+		android:layout_toLeftOf="@id/save_preset_buttons"
 		android:gravity="left"
 		android:textColor="#555555"
 		android:textSize="18dip"
 		android:text="@string/preset_name" />
 
 	<EditText android:id="@+id/save_preset_name"
-		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_alignParentLeft="true"
+		android:layout_toLeftOf="@id/save_preset_buttons"
 		android:layout_below="@id/save_preset_name_label"
 		android:layout_marginTop="2dip" />
 
 	<TextView android:id="@+id/save_preset_description_label"
-		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_alignParentLeft="true"
+		android:layout_toLeftOf="@id/save_preset_buttons"
 		android:layout_marginTop="10dip"
 		android:layout_below="@id/save_preset_name"
 		android:gravity="left"
@@ -84,10 +90,12 @@
 		android:text="@string/preset_description" />
 		
 	<EditText android:id="@+id/save_preset_description"
-		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentBottom="true"
+		android:layout_toLeftOf="@id/save_preset_buttons"
 		android:layout_below="@id/save_preset_description_label"
-		android:layout_above="@id/save_preset_buttons"
 		android:gravity="top|left"
 		android:scrollHorizontally="false"
 		android:selectAllOnFocus="true"

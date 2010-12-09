@@ -62,10 +62,10 @@ public class Config {
 			return false;
 		}
 		if (line.indexOf("#name=") == 0 && line.length() > 6) {
-			name = line.substring(6);
+			name = ConfigManager.decodeMetadata(line.substring(6));
 			return true;
 		} else if (line.indexOf("#summary=") == 0 && line.length() > 9) {
-	    	summary = line.substring(9);
+	    	summary = ConfigManager.decodeMetadata(line.substring(9));
 	    	return true;
 	    } else {
 	    	return false;
@@ -74,10 +74,10 @@ public class Config {
 	
 	public void save(BufferedWriter bw) throws IOException {
 		if (!name.equals("")) {
-			bw.write("#name=" + name + "\n");
+			bw.write("#name=" + ConfigManager.encodeMetadata(name) + "\n");
 		}
 		if (!summary.equals("")) {
-			bw.write("#summary=" + summary + "\n");
+			bw.write("#summary=" + ConfigManager.encodeMetadata(summary) + "\n");
 		}
 		wiimote.save(bw);
 		nunchuk.save(bw);

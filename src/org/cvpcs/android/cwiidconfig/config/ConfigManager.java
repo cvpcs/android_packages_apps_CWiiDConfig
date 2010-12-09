@@ -1,14 +1,23 @@
 package org.cvpcs.android.cwiidconfig.config;
 
+import android.util.Base64;
+import android.util.Log;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class ConfigManager {
+	public static final String TAG = "CWiiDConfig/ConfigManager";
+	
 	public static final String KEYSYM_ESC = "KEY_ESC";
 	public static final String KEYSYM_1 = "KEY_1";
 	public static final String KEYSYM_2 = "KEY_2";
@@ -1305,6 +1314,26 @@ public class ConfigManager {
 			return 236;
 		} else {
 			return 0;
+		}
+	}
+	
+	public static String encodeMetadata(String s) {
+		try {
+			return Base64.encodeToString(s.getBytes("UTF-16"),
+					Base64.NO_PADDING | Base64.NO_WRAP | Base64.URL_SAFE);
+		} catch(Exception e) {
+			Log.e(TAG, "Error retrieving UTF-16 charset.", e);
+			return "";
+		}
+	}
+	
+	public static String decodeMetadata(String s) {	
+		try {
+			return Charset.forName("UTF-16").decode(
+					ByteBuffer.wrap(Base64.decode(s, Base64.URL_SAFE))).toString();
+		} catch(Exception e) {
+			Log.e(TAG, "Error retrieving UTF-16 charset.", e);
+			return "";
 		}
 	}
 }

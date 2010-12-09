@@ -1,17 +1,20 @@
 package org.cvpcs.android.cwiidconfig.config;
 
+import android.util.Log;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.lang.Comparable;
-import java.util.HashMap;
 
-public class Preset implements Comparable {
+public class Preset implements Comparable<Preset> {
+	private static final String TAG = "CWiiDConfig/Preset";
+	
 	protected String mName;
 	protected String mSummary;
 	protected File mPresetFile;
 	protected Config mConfig;
-
+	
 	public Preset(File f) {
 		mPresetFile = f;
 
@@ -25,10 +28,15 @@ public class Preset implements Comparable {
 
 	public String getName() { return mName; }
 	public String getSummary() { return mSummary; }
+	
 	public File getFile() { return mPresetFile; }
 	
-	public boolean isValid() { return (mPresetFile.exists() && mPresetFile.canRead()); }
-	public boolean canDelete() { return (mPresetFile.exists() && mPresetFile.canWrite()); }
+	public void setName(String s) { mName = s; }
+	public void setSummary(String s) { mSummary = s; }
+	
+	public boolean exists() { return (mPresetFile.exists()); }
+	public boolean isSystem() { return (mPresetFile.exists() && !mPresetFile.canWrite()); }
+	
 	public Config getConfig() {
 		if(mConfig == null) {
 			loadConfig();
@@ -39,6 +47,10 @@ public class Preset implements Comparable {
 		mConfig.setSummary((mSummary == null ? "" : mSummary));
 		
 		return mConfig;
+	}
+	
+	public void setConfig(Config c) {
+		mConfig = c;
 	}
 	
 	public void loadConfig() {
@@ -62,7 +74,7 @@ public class Preset implements Comparable {
 	}
 	
 	public boolean delete() {
-		if(!canDelete()) {
+		if(isSystem()) {
 			return false;
 		}
 
@@ -71,8 +83,7 @@ public class Preset implements Comparable {
 		try {
 			was_deleted = mPresetFile.delete();
 		} catch(SecurityException e) {
-			// if we got here, then we were not allowed to delete due to security
-			e.printStackTrace();
+			Log.e(TAG, "Error deleting preset: " + mPresetFile.getAbsolutePath(), e);
 		}
 		
 		if(was_deleted) {
@@ -100,21 +111,19 @@ public class Preset implements Comparable {
 
 				// now begin parsing metadata
 				if(line.indexOf("#name=") == 0 && line.length() > 6) {
-					mName = line.substring(6);
+					mName = ConfigManager.decodeMetadata(line.substring(6)); 
 				} else if(line.indexOf("#summary=") == 0 && line.length() > 9) {
-					mSummary = line.substring(9);
+					mSummary = ConfigManager.decodeMetadata(line.substring(9));
 				}
 			}
 
 			br.close();
 		} catch(Exception e) {
-			// if something goes wrong we fail gracefully and assume no and/or
-			// malformed metadata
-			e.printStackTrace();
+			Log.e(TAG, "Error loading metadata for preset: " + mPresetFile.getAbsolutePath(), e);
 		}
 	}
 
-	public int compareTo(Object another) {
+	public int compareTo(Preset another) {
 		Preset another_preset = (Preset)another;
 
 		return mName.compareTo(another_preset.getName());

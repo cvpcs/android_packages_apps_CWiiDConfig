@@ -75,6 +75,8 @@ public class LoadPreset extends ListActivity {
 							if(!preset.delete()) {
 								Toast.makeText(v.getContext(), "Error deleting preset", 5000).show();
 							}
+							
+							// reload presets, since we deleted one (possibly)
 							PresetManager.scanPresets();
 							notifyDataSetChanged();
 						}
@@ -89,15 +91,20 @@ public class LoadPreset extends ListActivity {
 			if(preset.getSummary() == null) {
 				summary.setVisibility(View.GONE);
 			} else {
+				summary.setVisibility(View.VISIBLE);
 				summary.setText(preset.getSummary());
 			}
 
 			// we don't bother to show deletion options if it's a system config, and therefore
 			// they are not able to delete it anyway
-			if(!preset.canDelete()) {
+			if(preset.isSystem()) {
 				delete.setVisibility(View.GONE);
 				delete_text.setVisibility(View.GONE);
 				system_text.setVisibility(View.VISIBLE);
+			} else {
+				delete.setVisibility(View.VISIBLE);
+				delete_text.setVisibility(View.VISIBLE);
+				system_text.setVisibility(View.GONE);
 			}
 
 			return v;

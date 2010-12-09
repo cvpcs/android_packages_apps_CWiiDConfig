@@ -6,6 +6,9 @@ public class AutoPreset extends Preset {
 	private static final File AUTO_PRESET_FILE = new File("/sdcard/.cwiid/wminput/.autopreset");
 	private static AutoPreset AUTO_PRESET = null;
 	
+	private String mLoadedName = "";
+	private String mLoadedSummary = "";
+	
 	public static AutoPreset getAutoPreset() {
 		if(AUTO_PRESET == null) {
 			AUTO_PRESET = new AutoPreset();
@@ -20,6 +23,9 @@ public class AutoPreset extends Preset {
 		loadConfig();
 	}
 	
+	public String getLoadedName() { return mLoadedName; }
+	public String getLoadedSummary() { return mLoadedSummary; }
+	
 	public void save() {
 		if(mConfig != null) {
 			mConfig.setName("");
@@ -32,8 +38,8 @@ public class AutoPreset extends Preset {
 		mConfig = p.getConfig();
 		
 		if(mConfig != null) {
-			mName = mConfig.getName();
-			mSummary = mConfig.getSummary();
+			mLoadedName = mConfig.getName();
+			mLoadedSummary = mConfig.getSummary();
 		}
 		
 		save();
