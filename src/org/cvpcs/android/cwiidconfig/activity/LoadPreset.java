@@ -1,24 +1,19 @@
 package org.cvpcs.android.cwiidconfig.activity;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.ViewGroup.LayoutParams;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.os.Bundle;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,7 +65,8 @@ public class LoadPreset extends ListActivity {
 			final TextView system_text = (TextView)v.findViewById(R.id.load_preset_item_system_text);
 			final ImageView expand_icon = (ImageView)v.findViewById(R.id.load_preset_item_view_config_icon);
 			final TextView expand_text = (TextView)v.findViewById(R.id.load_preset_item_view_config_text);
-			final TextView config_text = (TextView)v.findViewById(R.id.load_preset_item_config_text);;
+			final TextView config_text = (TextView)v.findViewById(R.id.load_preset_item_config_text);
+			final LinearLayout expand_layout = (LinearLayout)v.findViewById(R.id.load_preset_item_view_expander_layout);
 			
 			load.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
@@ -121,7 +117,7 @@ public class LoadPreset extends ListActivity {
 				system_text.setVisibility(View.GONE);
 			}
 			
-			expand_icon.setOnClickListener(new View.OnClickListener() {
+			View.OnClickListener expandListener = new View.OnClickListener() {
 				public void onClick(View v) {
 					if(isExpanded.contains(preset)) {
 						isExpanded.remove(preset);
@@ -141,7 +137,11 @@ public class LoadPreset extends ListActivity {
 						config_text.setVisibility(View.GONE);
 					}
 				}
-			});
+			};
+			
+			expand_icon.setOnClickListener(expandListener);
+			expand_text.setOnClickListener(expandListener);
+			expand_layout.setOnClickListener(expandListener);
 
 			if(isExpanded.contains(preset)) {
 				expand_icon.setImageResource(R.drawable.expander_ic_maximized);

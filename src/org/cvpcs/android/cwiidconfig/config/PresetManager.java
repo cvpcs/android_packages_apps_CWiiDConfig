@@ -89,7 +89,6 @@ public class PresetManager {
 		File newPresetFile = new File(USER_PRESET_DIRECTORY, presetNameToFilename(name));
 		Preset newPreset = new Preset(newPresetFile);
 		newPreset.setName(name);
-		Log.d(TAG, "getPreset returning new preset: " + newPreset.getName());
 		
 		return newPreset;
 	}

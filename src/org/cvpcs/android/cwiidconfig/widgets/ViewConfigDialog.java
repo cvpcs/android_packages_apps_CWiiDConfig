@@ -5,6 +5,7 @@ import org.cvpcs.android.cwiidconfig.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -15,9 +16,9 @@ public class ViewConfigDialog extends Dialog {
 
 	public ViewConfigDialog(Context ctx) {
 		super(ctx);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.view_config_dlg);
 		
-		setTitle(R.string.view_config);
 		setCancelable(true);
 	
 		final TextView config_text = (TextView)findViewById(R.id.view_config_dlg_text);

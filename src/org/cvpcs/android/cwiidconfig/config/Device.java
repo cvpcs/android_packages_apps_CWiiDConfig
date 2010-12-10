@@ -94,22 +94,23 @@ public abstract class Device {
 	}
 	
 	public void saveHumanReadable(BufferedWriter bw) throws IOException {
-		for(Map.Entry<String, Integer> entry : mButtonMap.entrySet()) {
-			String button = entry.getKey();
-			int keysym = entry.getValue().intValue();
+		for(String button : mButtons) {
+			if(mButtonMap.containsKey(button)) {
+				int keysym = mButtonMap.get(button).intValue();
 			
-			String key = null;
+				String key = null;
 			
-			for(String akey : ConfigManager.ANDROID_KEYS) {
-				if(ConfigManager.convertHRToKeySym(akey) == keysym) {
-					key = akey;
-					break;
+				for(String akey : ConfigManager.ANDROID_KEYS) {
+					if(ConfigManager.convertHRToKeySym(akey) == keysym) {
+						key = akey;
+						break;
+					}
 				}
-			}
 			
-			if(key != null) {
-				bw.write(mName + " " + button + " => " + key);
-				bw.newLine();
+				if(key != null) {
+					bw.write(mName + " " + button + " => " + key);
+					bw.newLine();
+				}
 			}
 		}
 	}

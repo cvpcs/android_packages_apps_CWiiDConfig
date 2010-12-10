@@ -126,7 +126,7 @@ public class Preset implements Comparable<Preset> {
 	public int compareTo(Preset another) {
 		Preset another_preset = (Preset)another;
 
-		return mName.compareTo(another_preset.getName());
+		return mPresetFile.compareTo(another_preset.getFile());
 	}
 	
 	public boolean equals(Object o) {
@@ -135,15 +135,10 @@ public class Preset implements Comparable<Preset> {
 		
 		Preset other = (Preset)o;
 		
-		return (mPresetFile.getName().equals(convertNameToFilename(other.getName())));
+		return (mPresetFile.equals(other.getFile()));
 	}
 	
 	public int hashCode() {
-		return mPresetFile.getName().hashCode();
-	}
-	
-	protected String convertNameToFilename(String name) {
-		// we only accept characters that are awesome
-		return name.replaceAll("[^0-9A-Za-z]", "_");
+		return mPresetFile.hashCode();
 	}
 }

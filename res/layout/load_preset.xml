@@ -2,7 +2,7 @@
 	android:id="@+id/load_preset_frame_layout"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:background="#FFFFFF">
+	android:background="#CCCCCC">
 
 	<TextView android:id="@+id/android:empty"
 		android:text="@string/load_preset_empty"

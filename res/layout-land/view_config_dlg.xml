@@ -8,8 +8,8 @@
 	android:orientation="vertical">
 
 	<ScrollView android:id="@+id/view_config_dlg_scroll"
-		android:layout_width="250dip"
-		android:layout_height="350dip">
+		android:layout_width="350dip"
+		android:layout_height="175dip">
 
 		<TextView android:id="@+id/view_config_dlg_text"
 			android:padding="20dip"
