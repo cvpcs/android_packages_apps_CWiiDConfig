@@ -128,7 +128,16 @@ public class LoadPreset extends ListActivity {
 					if(isExpanded.contains(preset)) {
 						expand_icon.setImageResource(R.drawable.expander_ic_maximized);
 						expand_text.setText(R.string.hide_config);
-						config_text.setText(ConfigManager.getHumanReadable(preset.getConfig()));
+						
+
+						String configText = ConfigManager.getHumanReadable(preset.getConfig());
+						
+						if(configText.equals("")) {
+							// if we have no config text we load a string that notifies the user of that info
+							config_text.setText(R.string.config_empty);
+						} else {
+							config_text.setText(configText);
+						}
 						config_text.setVisibility(View.VISIBLE);
 					} else {
 						expand_icon.setImageResource(R.drawable.expander_ic_minimized);

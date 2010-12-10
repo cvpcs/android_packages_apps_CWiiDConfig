@@ -26,7 +26,13 @@ public class ViewConfigDialog extends Dialog {
 		
 		String configText = ConfigManager.getHumanReadable(CWiiDConfig.mAutoPreset.getConfig());
 		
-		config_text.setText(ConfigManager.getHumanReadable(CWiiDConfig.mAutoPreset.getConfig()));
+		if(configText.equals("")) {
+			// if we have no config text we load a string that notifies the user of that info
+			config_text.setText(R.string.config_empty);
+		} else {
+			config_text.setText(configText);	
+		}
+		
 		close_view.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				dismiss();

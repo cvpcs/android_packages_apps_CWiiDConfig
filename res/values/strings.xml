@@ -15,6 +15,7 @@
 	<string name="select_key_prompt">Select a keyboard key:</string>
 	<string name="config_button">Button</string>
 	<string name="config_key">Key Mapping</string>
+	<string name="config_empty">The configuration does not presently define any key mappings.</string>
 	
 	<!-- Stock strings to be used all over the floor -->
 	<string name="power_on">Start CWiiD</string>
