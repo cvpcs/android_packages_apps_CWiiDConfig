@@ -3,6 +3,8 @@ package org.cvpcs.android.cwiidconfig.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -104,6 +106,17 @@ public class ConfigWiimote extends Activity {
 			}
 		});
 	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+		menu = CWiiDConfig.createGlobalOptionsMenu(menu);
+    	return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	return CWiiDConfig.handleGlobalOptionsMenu(this, item, android.R.drawable.ic_menu_help);
+    }
 	
 	private void setConfig(String wiiButton, String keyButton) {
 		int keysym = ConfigManager.convertHRToKeySym(keyButton);

@@ -31,9 +31,6 @@ import org.cvpcs.android.cwiidconfig.config.Preset;
 import org.cvpcs.android.cwiidconfig.config.PresetManager;
 
 public class LoadPreset extends ListActivity {
-	private static final int OPTIONS_MENU_VIEW_CONFIG = Menu.FIRST + 1;
-	private static final int OPTIONS_MENU_VIEW_HELP = Menu.FIRST + 2;
-
 	private class PresetAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
 		private ArrayList<Preset> isExpanded;
@@ -174,40 +171,12 @@ public class LoadPreset extends ListActivity {
 	
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    	menu.add(0, OPTIONS_MENU_VIEW_CONFIG, 0, "View Current Configuration")
-    		.setIcon(R.drawable.ic_menu_compose);
-    	menu.add(0, OPTIONS_MENU_VIEW_HELP, 0, "Help")
-    		.setIcon(android.R.drawable.ic_menu_help);
+		menu = CWiiDConfig.createGlobalOptionsMenu(menu);
     	return true;
     }
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	switch(item.getItemId()) {
-    	case OPTIONS_MENU_VIEW_CONFIG:
-    		Dialog dlgAbout = new Dialog(this);
-    		dlgAbout.setTitle(R.string.view_config);
-    		dlgAbout.setContentView(R.layout.view_config_dlg);
-    		dlgAbout.setCancelable(true);
-    		
-    		final TextView config_text = (TextView)dlgAbout.findViewById(R.id.view_config_dlg_text);
-    		config_text.setText(ConfigManager.getHumanReadable(CWiiDConfig.mAutoPreset.getConfig()));
-    		
-    		dlgAbout.show();
-    		return true;
-    	case OPTIONS_MENU_VIEW_HELP:
-    		Dialog dlgHelp = new Dialog(this);
-    		dlgHelp.setTitle(R.string.help);
-    		dlgHelp.setContentView(R.layout.help_dlg);
-    		dlgHelp.setCancelable(true);
-    		
-    		final ImageView help_image = (ImageView)dlgHelp.findViewById(R.id.help_dlg_image);
-    		help_image.setImageResource(android.R.drawable.ic_menu_help);
-    		
-    		dlgHelp.show();
-    		return true;
-    	}
-    	
-    	return false;
+    	return CWiiDConfig.handleGlobalOptionsMenu(this, item, android.R.drawable.ic_menu_help);
     }
 }

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -93,6 +95,17 @@ public class SavePreset extends Activity {
 			}
 		});
 	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+		menu = CWiiDConfig.createGlobalOptionsMenu(menu);
+    	return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	return CWiiDConfig.handleGlobalOptionsMenu(this, item, android.R.drawable.ic_menu_help);
+    }
 	
 	private void savePreset(Preset p) {
 		// new preset so go ahead and save it

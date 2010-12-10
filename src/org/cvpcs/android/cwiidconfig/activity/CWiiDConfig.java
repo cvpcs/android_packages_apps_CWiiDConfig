@@ -1,27 +1,34 @@
 package org.cvpcs.android.cwiidconfig.activity;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.cvpcs.android.cwiidconfig.R;
 
 import org.cvpcs.android.cwiidconfig.config.AutoPreset;
+import org.cvpcs.android.cwiidconfig.config.ConfigManager;
 import org.cvpcs.android.cwiidconfig.daemon.CWiiDManager;
 import org.cvpcs.android.cwiidconfig.daemon.CWiiDDaemonService;
 import org.cvpcs.android.cwiidconfig.daemon.CWiiDStarter;
 import org.cvpcs.android.cwiidconfig.daemon.CWiiDStopper;
 
-public class CWiiDConfig extends Activity {
+public class CWiiDConfig extends Activity {	
+	private static final int GLOBAL_OPTIONS_MENU_VIEW_CONFIG = Menu.FIRST + 1;
+	private static final int GLOBAL_OPTIONS_MENU_VIEW_HELP = Menu.FIRST + 2;
+	
 	private static final int ALPHA_ENABLED = 0xFF;
 	private static final int ALPHA_DISABLED = 0x33;
 	
@@ -131,6 +138,70 @@ public class CWiiDConfig extends Activity {
 			default:
 				break;
 		}
+	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+		menu = createGlobalOptionsMenu(menu);
+    	return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	return handleGlobalOptionsMenu(this, item, android.R.drawable.ic_menu_help);
+    }
+	
+	public static Menu createGlobalOptionsMenu(Menu menu) {
+		menu.add(0, GLOBAL_OPTIONS_MENU_VIEW_CONFIG, 0, "View Current Configuration")
+			.setIcon(R.drawable.ic_menu_compose);
+		menu.add(0, GLOBAL_OPTIONS_MENU_VIEW_HELP, 0, "Help")
+			.setIcon(android.R.drawable.ic_menu_help);
+		
+		return menu;
+	}
+	
+	public static boolean handleGlobalOptionsMenu(Context ctx, MenuItem item, int helpResource) {
+    	switch(item.getItemId()) {
+    		case GLOBAL_OPTIONS_MENU_VIEW_CONFIG:
+    			final Dialog dlgView = new Dialog(ctx);
+    			dlgView.setTitle(R.string.view_config);
+    			dlgView.setContentView(R.layout.view_config_dlg);
+    			dlgView.setCancelable(true);
+    		
+    			final TextView config_text = (TextView)dlgView.findViewById(R.id.view_config_dlg_text);
+    			final Button close_view = (Button)dlgView.findViewById(R.id.view_config_dlg_close);
+    			
+    			config_text.setText(ConfigManager.getHumanReadable(CWiiDConfig.mAutoPreset.getConfig()));
+    			close_view.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {
+						dlgView.dismiss();
+					}
+				});
+    		
+    			dlgView.show();
+    			return true;
+    		case GLOBAL_OPTIONS_MENU_VIEW_HELP:
+    			final Dialog dlgHelp = new Dialog(ctx);
+    			dlgHelp.setTitle(R.string.help);
+    			dlgHelp.setContentView(R.layout.help_dlg);
+    			dlgHelp.setCancelable(true);
+    		
+    			final ImageView help_image = (ImageView)dlgHelp.findViewById(R.id.help_dlg_image);
+    			final Button close_help = (Button)dlgHelp.findViewById(R.id.help_dlg_close);
+    			
+    			help_image.setImageResource(helpResource);
+    			close_help.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {
+						dlgHelp.dismiss();
+					}
+				});
+    		
+    			dlgHelp.show();
+    			return true;
+    	}
+    	
+    	return false;
+		
 	}
 
 	/**
