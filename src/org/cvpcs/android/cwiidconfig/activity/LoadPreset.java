@@ -177,6 +177,6 @@ public class LoadPreset extends ListActivity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	return CWiiDConfig.handleGlobalOptionsMenu(this, item, android.R.drawable.ic_menu_help);
+    	return CWiiDConfig.handleGlobalOptionsMenu(this, item, R.drawable.help_load);
     }
 }

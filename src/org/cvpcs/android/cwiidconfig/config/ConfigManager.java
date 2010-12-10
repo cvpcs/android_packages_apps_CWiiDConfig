@@ -366,7 +366,7 @@ public class ConfigManager {
 			return "";
 		}
 		
-		return sw.toString();
+		return sw.toString().trim();
 	}
 	
 	/**

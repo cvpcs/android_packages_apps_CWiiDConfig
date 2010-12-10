@@ -114,7 +114,7 @@ public class ConfigNunchuk extends Activity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	return CWiiDConfig.handleGlobalOptionsMenu(this, item, android.R.drawable.ic_menu_help);
+    	return CWiiDConfig.handleGlobalOptionsMenu(this, item, R.drawable.help_configdevice);
     }
 	
 	private void setConfig(String wiiButton, String keyButton) {

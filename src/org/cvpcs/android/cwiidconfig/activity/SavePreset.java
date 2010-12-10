@@ -104,7 +104,7 @@ public class SavePreset extends Activity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	return CWiiDConfig.handleGlobalOptionsMenu(this, item, android.R.drawable.ic_menu_help);
+    	return CWiiDConfig.handleGlobalOptionsMenu(this, item, R.drawable.help_save);
     }
 	
 	private void savePreset(Preset p) {

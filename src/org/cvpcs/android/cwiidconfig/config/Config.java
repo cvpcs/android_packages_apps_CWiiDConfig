@@ -63,6 +63,7 @@ public class Config {
 	public void saveHumanReadable(BufferedWriter bw) throws IOException {
 		for(Device d : mDevices.values()) {
 			d.saveHumanReadable(bw);
+			bw.newLine();
 		}
 	}
 	

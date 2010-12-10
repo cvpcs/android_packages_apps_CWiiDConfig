@@ -1,16 +1,19 @@
 package org.cvpcs.android.cwiidconfig.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -24,8 +27,13 @@ import org.cvpcs.android.cwiidconfig.daemon.CWiiDManager;
 import org.cvpcs.android.cwiidconfig.daemon.CWiiDDaemonService;
 import org.cvpcs.android.cwiidconfig.daemon.CWiiDStarter;
 import org.cvpcs.android.cwiidconfig.daemon.CWiiDStopper;
+import org.cvpcs.android.cwiidconfig.widgets.HelpDialog;
+import org.cvpcs.android.cwiidconfig.widgets.ViewConfigDialog;
 
 public class CWiiDConfig extends Activity {	
+	private static final String PREF_NAME = "CWiiDConfigPreferences";
+	private static final String PREF_KEY_FIRSTRUN = "FirstRun";
+	
 	private static final int GLOBAL_OPTIONS_MENU_VIEW_CONFIG = Menu.FIRST + 1;
 	private static final int GLOBAL_OPTIONS_MENU_VIEW_HELP = Menu.FIRST + 2;
 	
@@ -116,6 +124,17 @@ public class CWiiDConfig extends Activity {
 			}
 		});
 		
+		// if it's our first run, we display a message welcoming the user and notifying
+		// them of the help options in the context menu
+		SharedPreferences prefs = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+		boolean firstRun = prefs.getBoolean(PREF_KEY_FIRSTRUN, true);
+		if(firstRun) {
+			new HelpDialog(this, R.drawable.help_firstrun).show();
+			
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putBoolean(PREF_KEY_FIRSTRUN, false);
+			editor.commit();
+		}
 	}
 	
 	@Override
@@ -148,7 +167,7 @@ public class CWiiDConfig extends Activity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-    	return handleGlobalOptionsMenu(this, item, android.R.drawable.ic_menu_help);
+    	return handleGlobalOptionsMenu(this, item, R.drawable.help_main);
     }
 	
 	public static Menu createGlobalOptionsMenu(Menu menu) {
@@ -160,43 +179,13 @@ public class CWiiDConfig extends Activity {
 		return menu;
 	}
 	
-	public static boolean handleGlobalOptionsMenu(Context ctx, MenuItem item, int helpResource) {
+	public static boolean handleGlobalOptionsMenu(Context ctx, MenuItem item, int helpImageResourceId) {
     	switch(item.getItemId()) {
     		case GLOBAL_OPTIONS_MENU_VIEW_CONFIG:
-    			final Dialog dlgView = new Dialog(ctx);
-    			dlgView.setTitle(R.string.view_config);
-    			dlgView.setContentView(R.layout.view_config_dlg);
-    			dlgView.setCancelable(true);
-    		
-    			final TextView config_text = (TextView)dlgView.findViewById(R.id.view_config_dlg_text);
-    			final Button close_view = (Button)dlgView.findViewById(R.id.view_config_dlg_close);
-    			
-    			config_text.setText(ConfigManager.getHumanReadable(CWiiDConfig.mAutoPreset.getConfig()));
-    			close_view.setOnClickListener(new View.OnClickListener() {
-					public void onClick(View v) {
-						dlgView.dismiss();
-					}
-				});
-    		
-    			dlgView.show();
+    			new ViewConfigDialog(ctx).show();
     			return true;
     		case GLOBAL_OPTIONS_MENU_VIEW_HELP:
-    			final Dialog dlgHelp = new Dialog(ctx);
-    			dlgHelp.setTitle(R.string.help);
-    			dlgHelp.setContentView(R.layout.help_dlg);
-    			dlgHelp.setCancelable(true);
-    		
-    			final ImageView help_image = (ImageView)dlgHelp.findViewById(R.id.help_dlg_image);
-    			final Button close_help = (Button)dlgHelp.findViewById(R.id.help_dlg_close);
-    			
-    			help_image.setImageResource(helpResource);
-    			close_help.setOnClickListener(new View.OnClickListener() {
-					public void onClick(View v) {
-						dlgHelp.dismiss();
-					}
-				});
-    		
-    			dlgHelp.show();
+    			new HelpDialog(ctx, helpImageResourceId).show();
     			return true;
     	}
     	
