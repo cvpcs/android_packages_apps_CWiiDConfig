@@ -24,6 +24,8 @@ public class ViewConfigDialog extends Dialog {
 		final TextView config_text = (TextView)findViewById(R.id.view_config_dlg_text);
 		final Button close_view = (Button)findViewById(R.id.view_config_dlg_close);
 		
+		String configText = ConfigManager.getHumanReadable(CWiiDConfig.mAutoPreset.getConfig());
+		
 		config_text.setText(ConfigManager.getHumanReadable(CWiiDConfig.mAutoPreset.getConfig()));
 		close_view.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {

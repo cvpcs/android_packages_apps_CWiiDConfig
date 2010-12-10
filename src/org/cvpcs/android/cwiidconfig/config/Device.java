@@ -32,7 +32,7 @@ public abstract class Device {
 	public void setButton(String button, Integer keysym) {		
 		// first check if they are setting a human-readable button
 		if(mButtons.contains(button)) {
-			if(keysym == null || keysym == 0) {
+			if(keysym == null) {
 				mButtonMap.remove(button);
 			} else {
 				mButtonMap.put(button, keysym);
@@ -45,7 +45,7 @@ public abstract class Device {
 		if(i >= 0 && i < mButtons.size()) {
 			String cs = mButtons.get(i);
 			
-			if(keysym == null || keysym == 0) {
+			if(keysym == null) {
 				mButtonMap.remove(cs);
 			} else {
 				mButtonMap.put(cs, keysym);
@@ -86,7 +86,7 @@ public abstract class Device {
 			String button = mMatcher.group(1);
 			String value = mMatcher.group(3);
 			
-			setButton(button, Integer.valueOf(ConfigManager.convertString(value)));
+			setButton(button, ConfigManager.convertString(value));
 			return true;
 		} else {
 			return false;
@@ -96,12 +96,15 @@ public abstract class Device {
 	public void saveHumanReadable(BufferedWriter bw) throws IOException {
 		for(String button : mButtons) {
 			if(mButtonMap.containsKey(button)) {
-				int keysym = mButtonMap.get(button).intValue();
+				Integer keysym = mButtonMap.get(button);
 			
 				String key = null;
 			
 				for(String akey : ConfigManager.ANDROID_KEYS) {
-					if(ConfigManager.convertHRToKeySym(akey) == keysym) {
+					Integer sym = ConfigManager.convertHRToKeySym(akey);
+					
+					if(sym != null && 
+							sym.equals(keysym)) {
 						key = akey;
 						break;
 					}
@@ -118,13 +121,16 @@ public abstract class Device {
 	public void save(BufferedWriter bw) throws IOException {
 		for(Map.Entry<String, Integer> entry : mButtonMap.entrySet()) {
 			String button = entry.getKey();
-			int keysym = entry.getValue().intValue();
+			Integer keysym = entry.getValue();
 			
 			int i = mButtons.indexOf(button);
 			if(i >= 0 && i < mConfigButtons.size()) {
-				bw.write(mConfigButtons.get(i) + "=" +
-						ConfigManager.convertKeysym(keysym));
-				bw.newLine();
+				String sym = ConfigManager.convertKeysym(keysym);
+				
+				if(sym != null) {
+					bw.write(mConfigButtons.get(i) + "=" + sym);
+					bw.newLine();
+				}
 			}
 		}
 	}

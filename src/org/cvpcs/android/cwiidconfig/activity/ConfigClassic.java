@@ -67,7 +67,10 @@ public class ConfigClassic extends Activity {
 				if(cursym != null) {
 					for(int i = 0; i < ANDROID_KEYS.size(); i++) {
 						String key = ANDROID_KEYS.get(i).toString();
-						if(cursym.equals(Integer.valueOf(ConfigManager.convertHRToKeySym(key)))) {
+						
+						Integer sym = ConfigManager.convertHRToKeySym(key);
+						
+						if(sym != null && cursym.equals(sym)) {
 							key_spinner.setSelection(i);
 							clearConfig = false;
 							break;
@@ -118,7 +121,7 @@ public class ConfigClassic extends Activity {
     }
 	
 	private void setConfig(String wiiButton, String keyButton) {
-		int keysym = ConfigManager.convertHRToKeySym(keyButton);
+		Integer keysym = ConfigManager.convertHRToKeySym(keyButton);
 		
 		Device classic = CWiiDConfig.mAutoPreset.getConfig().getDevice(ClassicController.NAME);
 		
@@ -127,11 +130,7 @@ public class ConfigClassic extends Activity {
 			return;
 		}
 		
-		if(keysym > 0) {
-			classic.setButton(wiiButton, Integer.valueOf(keysym));
-		} else {
-			classic.setButton(wiiButton, null);
-		}
+		classic.setButton(wiiButton, keysym);
 		
 		CWiiDConfig.mAutoPreset.save();
 	}

@@ -68,7 +68,10 @@ public class ConfigWiimote extends Activity {
 				if(cursym != null) {
 					for(int i = 0; i < ANDROID_KEYS.size(); i++) {
 						String key = ANDROID_KEYS.get(i).toString();
-						if(cursym.equals(Integer.valueOf(ConfigManager.convertHRToKeySym(key)))) {
+						
+						Integer sym = ConfigManager.convertHRToKeySym(key);
+						
+						if(sym != null && cursym.equals(sym)) {
 							key_spinner.setSelection(i);
 							clearConfig = false;
 							break;
@@ -119,7 +122,7 @@ public class ConfigWiimote extends Activity {
     }
 	
 	private void setConfig(String wiiButton, String keyButton) {
-		int keysym = ConfigManager.convertHRToKeySym(keyButton);
+		Integer keysym = ConfigManager.convertHRToKeySym(keyButton);
 
 		Device wiimote = CWiiDConfig.mAutoPreset.getConfig().getDevice(Wiimote.NAME);
 		
@@ -128,11 +131,7 @@ public class ConfigWiimote extends Activity {
 			return;
 		}
 		
-		if(keysym > 0) {
-			wiimote.setButton(wiiButton, Integer.valueOf(keysym));
-		} else {
-			wiimote.setButton(wiiButton, null);
-		}
+		wiimote.setButton(wiiButton, keysym);
 		
 		CWiiDConfig.mAutoPreset.save();
 	}

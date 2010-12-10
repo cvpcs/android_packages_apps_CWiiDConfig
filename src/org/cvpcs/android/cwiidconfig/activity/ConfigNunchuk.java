@@ -67,7 +67,10 @@ public class ConfigNunchuk extends Activity {
 				if(cursym != null) {
 					for(int i = 0; i < ANDROID_KEYS.size(); i++) {
 						String key = ANDROID_KEYS.get(i).toString();
-						if(cursym.equals(Integer.valueOf(ConfigManager.convertHRToKeySym(key)))) {
+						
+						Integer sym = ConfigManager.convertHRToKeySym(key);
+						
+						if(sym != null && cursym.equals(sym)) {
 							key_spinner.setSelection(i);
 							clearConfig = false;
 							break;
@@ -118,7 +121,7 @@ public class ConfigNunchuk extends Activity {
     }
 	
 	private void setConfig(String wiiButton, String keyButton) {
-		int keysym = ConfigManager.convertHRToKeySym(keyButton);
+		Integer keysym = ConfigManager.convertHRToKeySym(keyButton);
 
 		Device nunchuk = CWiiDConfig.mAutoPreset.getConfig().getDevice(Nunchuk.NAME);
 
@@ -126,12 +129,8 @@ public class ConfigNunchuk extends Activity {
 			Log.e(TAG, "Nunchuk device not found!");
 			return;
 		}
-		
-		if(keysym > 0) {
-			nunchuk.setButton(wiiButton, Integer.valueOf(keysym));
-		} else {
-			nunchuk.setButton(wiiButton, null);
-		}
+
+		nunchuk.setButton(wiiButton, keysym);
 		
 		CWiiDConfig.mAutoPreset.save();
 	}
