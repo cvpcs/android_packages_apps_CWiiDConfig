@@ -170,6 +170,22 @@ public class ConfigClassic extends Activity {
 			setImageButton(R.drawable.classic_button_home);
 		} else if(button.equals(ClassicController.BUTTON_MINUS)) {
 			setImageButton(R.drawable.classic_button_minus);
+		} else if(button.equals(ClassicController.BUTTON_LS_UP)) {
+			setImageButton(R.drawable.classic_button_lstick_up);
+		} else if(button.equals(ClassicController.BUTTON_LS_LEFT)) {
+			setImageButton(R.drawable.classic_button_lstick_left);
+		} else if(button.equals(ClassicController.BUTTON_LS_RIGHT)) {
+			setImageButton(R.drawable.classic_button_lstick_right);
+		} else if(button.equals(ClassicController.BUTTON_LS_DOWN)) {
+			setImageButton(R.drawable.classic_button_lstick_down);
+		} else if(button.equals(ClassicController.BUTTON_RS_UP)) {
+			setImageButton(R.drawable.classic_button_rstick_up);
+		} else if(button.equals(ClassicController.BUTTON_RS_LEFT)) {
+			setImageButton(R.drawable.classic_button_rstick_left);
+		} else if(button.equals(ClassicController.BUTTON_RS_RIGHT)) {
+			setImageButton(R.drawable.classic_button_rstick_right);
+		} else if(button.equals(ClassicController.BUTTON_RS_DOWN)) {
+			setImageButton(R.drawable.classic_button_rstick_down);
 		} else {
 			setImageButton();
 		}

@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 public class ClassicController extends Device {
 	public static final String NAME = "Classic";
+	private static String PLUGIN_STICK2BTN = "Plugin.classic_stick2btn";
 	private static final Pattern PATTERN = Pattern.compile(
 			"((classic)\\.[a-z0-9_]+)[ \t]*=[ \t]*([a-z0-9_]+)",
 			Pattern.CASE_INSENSITIVE);
@@ -27,6 +28,14 @@ public class ClassicController extends Device {
 	public static final String BUTTON_R			= "R";
 	public static final String BUTTON_ZL		= "ZL";
 	public static final String BUTTON_ZR		= "ZR";
+	public static final String BUTTON_LS_UP		= "Left Stick, Up";
+	public static final String BUTTON_LS_LEFT	= "Left Stick, Left";
+	public static final String BUTTON_LS_RIGHT	= "Left Stick, Right";
+	public static final String BUTTON_LS_DOWN	= "Left Stick, Down";
+	public static final String BUTTON_RS_UP		= "Right Stick, Up";
+	public static final String BUTTON_RS_LEFT	= "Right Stick, Left";
+	public static final String BUTTON_RS_RIGHT	= "Right Stick, Right";
+	public static final String BUTTON_RS_DOWN	= "Right Stick, Down";
 	
 	static {
 		BUTTONS.add(BUTTON_UP);
@@ -44,6 +53,14 @@ public class ClassicController extends Device {
 		BUTTONS.add(BUTTON_R);
 		BUTTONS.add(BUTTON_ZL);
 		BUTTONS.add(BUTTON_ZR);
+		BUTTONS.add(BUTTON_LS_UP);
+		BUTTONS.add(BUTTON_LS_LEFT);
+		BUTTONS.add(BUTTON_LS_RIGHT);
+		BUTTONS.add(BUTTON_LS_DOWN);
+		BUTTONS.add(BUTTON_RS_UP);
+		BUTTONS.add(BUTTON_RS_LEFT);
+		BUTTONS.add(BUTTON_RS_RIGHT);
+		BUTTONS.add(BUTTON_RS_DOWN);
 
 		CONFIG_BUTTONS.add(NAME + "." + BUTTON_UP);
 		CONFIG_BUTTONS.add(NAME + "." + BUTTON_LEFT);
@@ -60,6 +77,14 @@ public class ClassicController extends Device {
 		CONFIG_BUTTONS.add(NAME + "." + BUTTON_R);
 		CONFIG_BUTTONS.add(NAME + "." + BUTTON_ZL);
 		CONFIG_BUTTONS.add(NAME + "." + BUTTON_ZR);
+		CONFIG_BUTTONS.add(PLUGIN_STICK2BTN + ".LStick_Up");
+		CONFIG_BUTTONS.add(PLUGIN_STICK2BTN + ".LStick_Left");
+		CONFIG_BUTTONS.add(PLUGIN_STICK2BTN + ".LStick_Right");
+		CONFIG_BUTTONS.add(PLUGIN_STICK2BTN + ".LStick_Down");
+		CONFIG_BUTTONS.add(PLUGIN_STICK2BTN + ".RStick_Up");
+		CONFIG_BUTTONS.add(PLUGIN_STICK2BTN + ".RStick_Left");
+		CONFIG_BUTTONS.add(PLUGIN_STICK2BTN + ".RStick_Right");
+		CONFIG_BUTTONS.add(PLUGIN_STICK2BTN + ".RStick_Down");
 	}
 	
 	public ClassicController() {
