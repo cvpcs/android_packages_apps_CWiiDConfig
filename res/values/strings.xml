@@ -23,6 +23,9 @@
 	<string name="save">Save</string>
 	<string name="cancel">Cancel</string>
 	<string name="delete">Delete</string>
+	<string name="help">Help</string>
+	<string name="view_config">View configuration</string>
+	<string name="hide_config">Hide configuration</string>
 
 	<!-- Preset meta labels -->
 	<string name="preset_name">Preset name:</string>

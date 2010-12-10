@@ -2,6 +2,7 @@ package org.cvpcs.android.cwiidconfig.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,20 +13,23 @@ import java.util.ArrayList;
 
 import org.cvpcs.android.cwiidconfig.R;
 import org.cvpcs.android.cwiidconfig.config.ConfigManager;
+import org.cvpcs.android.cwiidconfig.config.Device;
 import org.cvpcs.android.cwiidconfig.config.Nunchuk;
 
 public class ConfigNunchuk extends Activity {
+	private static final String TAG = "CWiiDConfig/ConfigNunchuk";
+	
 	private static final int BUTTON_ALPHA = 0x66;
 	
-	private static final ArrayList<CharSequence> ANDROID_KEYS = new ArrayList<CharSequence>();
+	private static final ArrayList<String> ANDROID_KEYS = new ArrayList<String>();
 	
 	static {
 		ANDROID_KEYS.add("[ Unmapped ]");
 		ANDROID_KEYS.addAll(ConfigManager.ANDROID_KEYS);
 	}
 	
-	private ArrayAdapter<CharSequence> mWiiAdapter;
-	private ArrayAdapter<CharSequence> mKeyAdapter;
+	private ArrayAdapter<String> mWiiAdapter;
+	private ArrayAdapter<String> mKeyAdapter;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -36,26 +40,32 @@ public class ConfigNunchuk extends Activity {
 		final Spinner wii_spinner = (Spinner)findViewById(R.id.config_nunchuk_wiibutton);
 		final Spinner key_spinner = (Spinner)findViewById(R.id.config_nunchuk_keybutton);
 		
-		mWiiAdapter = new ArrayAdapter<CharSequence>(this, R.layout.sexy_combo, Nunchuk.NUNCHUK_BUTTONS);
+		mWiiAdapter = new ArrayAdapter<String>(this, R.layout.sexy_combo, Nunchuk.BUTTONS);
 		mWiiAdapter.setDropDownViewResource(R.layout.sexy_combo_dropdown);
 		wii_spinner.setAdapter(mWiiAdapter);
 		wii_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
-				String button = Nunchuk.NUNCHUK_BUTTONS.get(position).toString();
+				String button = Nunchuk.BUTTONS.get(position).toString();
 				
 				setImageButton(button);
 				
 				// do we have a config
-				Nunchuk nunchuk = CWiiDConfig.mAutoPreset.getConfig().getNunchuk();
-				int cursym = nunchuk.getButton(button);
+				Device nunchuk = CWiiDConfig.mAutoPreset.getConfig().getDevice(Nunchuk.NAME);
+
+				if(nunchuk == null) {
+					Log.e(TAG, "Nunchuk device not found!");
+					return;
+				}
+				
+				Integer cursym = nunchuk.getButton(button);
 				
 				boolean clearConfig = true;
 				
-				if(cursym > 0) {
+				if(cursym != null) {
 					for(int i = 0; i < ANDROID_KEYS.size(); i++) {
 						String key = ANDROID_KEYS.get(i).toString();
-						if(cursym == ConfigManager.convertHRToKeySym(key)) {
+						if(cursym.equals(Integer.valueOf(ConfigManager.convertHRToKeySym(key)))) {
 							key_spinner.setSelection(i);
 							clearConfig = false;
 							break;
@@ -73,21 +83,21 @@ public class ConfigNunchuk extends Activity {
 			}
 		});
 		
-		mKeyAdapter = new ArrayAdapter<CharSequence>(this, R.layout.sexy_combo, ANDROID_KEYS);
+		mKeyAdapter = new ArrayAdapter<String>(this, R.layout.sexy_combo, ANDROID_KEYS);
 		mKeyAdapter.setDropDownViewResource(R.layout.sexy_combo_dropdown);
 		key_spinner.setAdapter(mKeyAdapter);
 		key_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
 				setConfig(
-						Nunchuk.NUNCHUK_BUTTONS.get(wii_spinner.getSelectedItemPosition()).toString(),
+						Nunchuk.BUTTONS.get(wii_spinner.getSelectedItemPosition()).toString(),
 						ANDROID_KEYS.get(position).toString()
 						);
 			}
 	
 			public void onNothingSelected(AdapterView<?> parent) {
 				setConfig(
-						Nunchuk.NUNCHUK_BUTTONS.get(wii_spinner.getSelectedItemPosition()).toString(),
+						Nunchuk.BUTTONS.get(wii_spinner.getSelectedItemPosition()).toString(),
 						ANDROID_KEYS.get(0).toString()
 						);
 			}
@@ -96,11 +106,18 @@ public class ConfigNunchuk extends Activity {
 	
 	private void setConfig(String wiiButton, String keyButton) {
 		int keysym = ConfigManager.convertHRToKeySym(keyButton);
+
+		Device nunchuk = CWiiDConfig.mAutoPreset.getConfig().getDevice(Nunchuk.NAME);
+
+		if(nunchuk == null) {
+			Log.e(TAG, "Nunchuk device not found!");
+			return;
+		}
 		
 		if(keysym > 0) {
-			CWiiDConfig.mAutoPreset.getConfig().getNunchuk().setButton(wiiButton, keysym);
+			nunchuk.setButton(wiiButton, Integer.valueOf(keysym));
 		} else {
-			CWiiDConfig.mAutoPreset.getConfig().getNunchuk().setButton(wiiButton, 0);
+			nunchuk.setButton(wiiButton, null);
 		}
 		
 		CWiiDConfig.mAutoPreset.save();
@@ -111,17 +128,17 @@ public class ConfigNunchuk extends Activity {
 			button = "";
 		}
 		
-		if(button.equals(Nunchuk.NUNCHUK_BUTTON_UP)) {
+		if(button.equals(Nunchuk.BUTTON_UP)) {
 			setImageButton(R.drawable.nunchuk_button_up);
-		} else if(button.equals(Nunchuk.NUNCHUK_BUTTON_LEFT)) {
+		} else if(button.equals(Nunchuk.BUTTON_LEFT)) {
 			setImageButton(R.drawable.nunchuk_button_left);
-		} else if(button.equals(Nunchuk.NUNCHUK_BUTTON_RIGHT)) {
+		} else if(button.equals(Nunchuk.BUTTON_RIGHT)) {
 			setImageButton(R.drawable.nunchuk_button_right);
-		} else if(button.equals(Nunchuk.NUNCHUK_BUTTON_DOWN)) {
+		} else if(button.equals(Nunchuk.BUTTON_DOWN)) {
 			setImageButton(R.drawable.nunchuk_button_down);
-		} else if(button.equals(Nunchuk.NUNCHUK_BUTTON_C)) {
+		} else if(button.equals(Nunchuk.BUTTON_C)) {
 			setImageButton(R.drawable.nunchuk_button_c);
-		} else if(button.equals(Nunchuk.NUNCHUK_BUTTON_Z)) {
+		} else if(button.equals(Nunchuk.BUTTON_Z)) {
 			setImageButton(R.drawable.nunchuk_button_z);
 		} else {
 			setImageButton();

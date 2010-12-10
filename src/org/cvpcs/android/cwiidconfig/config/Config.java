@@ -3,57 +3,45 @@ package org.cvpcs.android.cwiidconfig.config;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class Config {
-	private String name;
-	private String summary;
-	private Wiimote wiimote;
-	private Nunchuk nunchuk;
-	private ClassicController classicController;
+	
+	private String mName;
+	private String mSummary;
+	private HashMap<String, Device> mDevices;
 	
 	public Config() {
-		name = "";
-		summary = "";
-		wiimote = new Wiimote();
-		nunchuk = new Nunchuk();
-		classicController = new ClassicController();
+		mName = "";
+		mSummary = "";
+		mDevices = new HashMap<String, Device>();
+		mDevices.put(Wiimote.NAME, new Wiimote());
+		mDevices.put(Nunchuk.NAME, new Nunchuk());
+		mDevices.put(ClassicController.NAME, new ClassicController());
 	}
 	
 	public Config(BufferedReader br) throws IOException {
-		name = "";
-		summary = "";
-		wiimote = new Wiimote();
-		nunchuk = new Nunchuk();
-		classicController = new ClassicController();
+		mName = "";
+		mSummary = "";
+		mDevices = new HashMap<String, Device>();
+		mDevices.put(Wiimote.NAME, new Wiimote());
+		mDevices.put(Nunchuk.NAME, new Nunchuk());
+		mDevices.put(ClassicController.NAME, new ClassicController());
 		load(br);
 	}
 	
-	public String getName() {
-		return name;
-	}
+	public String getName() { return mName; }
+	public String getSummary() { return mSummary; }
+
+	public void setName(String n) { mName = n; }
+	public void setSummary(String s) { mSummary = s; }
 	
-	public String getSummary() {
-		return summary;
-	}
-	
-	public Wiimote getWiimote() {
-		return wiimote;
-	}
-	
-	public Nunchuk getNunchuk() {
-		return nunchuk;
-	}
-	
-	public ClassicController getClassicController() {
-		return classicController;
-	}
-	
-	public void setName(String n) {
-		name = n;
-	}
-	
-	public void setSummary(String s) {
-		summary = s;
+	public Device getDevice(String name) {
+		if(mDevices.containsKey(name)) {
+			return mDevices.get(name);
+		} else {
+			return null;
+		}
 	}
 	
 	private boolean readLine(String line) {
@@ -62,39 +50,49 @@ public class Config {
 			return false;
 		}
 		if (line.indexOf("#name=") == 0 && line.length() > 6) {
-			name = ConfigManager.decodeMetadata(line.substring(6));
+			mName = ConfigManager.decodeMetadata(line.substring(6));
 			return true;
 		} else if (line.indexOf("#summary=") == 0 && line.length() > 9) {
-	    	summary = ConfigManager.decodeMetadata(line.substring(9));
+	    	mSummary = ConfigManager.decodeMetadata(line.substring(9));
 	    	return true;
 	    } else {
 	    	return false;
 	    }
 	}
 	
+	public void saveHumanReadable(BufferedWriter bw) throws IOException {
+		for(Device d : mDevices.values()) {
+			d.saveHumanReadable(bw);
+		}
+	}
+	
 	public void save(BufferedWriter bw) throws IOException {
-		if (!name.equals("")) {
-			bw.write("#name=" + ConfigManager.encodeMetadata(name) + "\n");
+		if (!mName.equals("")) {
+			bw.write("#name=" + ConfigManager.encodeMetadata(mName) + "\n");
 		}
-		if (!summary.equals("")) {
-			bw.write("#summary=" + ConfigManager.encodeMetadata(summary) + "\n");
+		if (!mSummary.equals("")) {
+			bw.write("#summary=" + ConfigManager.encodeMetadata(mSummary) + "\n");
 		}
-		wiimote.save(bw);
-		nunchuk.save(bw);
-		classicController.save(bw);
+		
+		for(Device d : mDevices.values()) {
+			d.save(bw);
+		}
 	}
 	
 	private void load(BufferedReader br) throws IOException {
 		String line;
 		while ((line = br.readLine()) != null) {
-			if (!wiimote.readLine(line)) {
-				if (!classicController.readLine(line)) {
-					if (!nunchuk.readLine(line)) {
-						if (!readLine(line)) {
-							// unhandled line
-						}
-					}
+			boolean wasRead = false;
+			
+			for(Device d : mDevices.values()) {
+				if(d.readLine(line)) {
+					wasRead = true;
+					break;
 				}
+			}
+			
+			if(!wasRead) {
+				readLine(line);
 			}
 		}
 	}

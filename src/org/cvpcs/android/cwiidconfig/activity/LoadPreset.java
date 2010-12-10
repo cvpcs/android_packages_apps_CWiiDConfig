@@ -1,34 +1,46 @@
 package org.cvpcs.android.cwiidconfig.activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.os.Bundle;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import org.cvpcs.android.cwiidconfig.R;
 
+import org.cvpcs.android.cwiidconfig.config.ConfigManager;
 import org.cvpcs.android.cwiidconfig.config.Preset;
 import org.cvpcs.android.cwiidconfig.config.PresetManager;
 
 public class LoadPreset extends ListActivity {
+	private static final int OPTIONS_MENU_VIEW_CONFIG = Menu.FIRST + 1;
+	private static final int OPTIONS_MENU_VIEW_HELP = Menu.FIRST + 2;
 
 	private class PresetAdapter extends BaseAdapter {
 		private LayoutInflater inflater;
+		private ArrayList<Preset> isExpanded;
 
 		public PresetAdapter(Context c) {
 			inflater = LayoutInflater.from(c);
+			isExpanded = new ArrayList<Preset>();
 		}
 
 		public int getCount() {
@@ -44,9 +56,11 @@ public class LoadPreset extends ListActivity {
 		}
 
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View v = convertView;
-			if(v == null) {
+			final View v;
+			if(convertView == null) {
 				v = inflater.inflate(R.layout.load_preset_item, null);
+			} else {
+				v = convertView;
 			}
 
 			final Preset preset = PresetManager.getPreset(position);
@@ -57,6 +71,9 @@ public class LoadPreset extends ListActivity {
 			final ImageButton delete = (ImageButton)v.findViewById(R.id.load_preset_item_delete_button);
 			final TextView delete_text = (TextView)v.findViewById(R.id.load_preset_item_delete_text);
 			final TextView system_text = (TextView)v.findViewById(R.id.load_preset_item_system_text);
+			final ImageView expand_icon = (ImageView)v.findViewById(R.id.load_preset_item_view_config_icon);
+			final TextView expand_text = (TextView)v.findViewById(R.id.load_preset_item_view_config_text);
+			final TextView config_text = (TextView)v.findViewById(R.id.load_preset_item_config_text);;
 			
 			load.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
@@ -106,6 +123,40 @@ public class LoadPreset extends ListActivity {
 				delete_text.setVisibility(View.VISIBLE);
 				system_text.setVisibility(View.GONE);
 			}
+			
+			expand_icon.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					if(isExpanded.contains(preset)) {
+						isExpanded.remove(preset);
+					} else {
+						isExpanded.add(preset);
+					}
+					
+					if(isExpanded.contains(preset)) {
+						expand_icon.setImageResource(R.drawable.expander_ic_maximized);
+						expand_text.setText(R.string.hide_config);
+						config_text.setText(ConfigManager.getHumanReadable(preset.getConfig()));
+						config_text.setVisibility(View.VISIBLE);
+					} else {
+						expand_icon.setImageResource(R.drawable.expander_ic_minimized);
+						expand_text.setText(R.string.view_config);
+						config_text.setText("");
+						config_text.setVisibility(View.GONE);
+					}
+				}
+			});
+
+			if(isExpanded.contains(preset)) {
+				expand_icon.setImageResource(R.drawable.expander_ic_maximized);
+				expand_text.setText(R.string.hide_config);
+				config_text.setText(ConfigManager.getHumanReadable(preset.getConfig()));
+				config_text.setVisibility(View.VISIBLE);
+			} else {
+				expand_icon.setImageResource(R.drawable.expander_ic_minimized);
+				expand_text.setText(R.string.view_config);
+				config_text.setText("");
+				config_text.setVisibility(View.GONE);
+			}
 
 			return v;
 		}
@@ -120,4 +171,43 @@ public class LoadPreset extends ListActivity {
 
 		getListView().setAdapter(new PresetAdapter(this));
 	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	menu.add(0, OPTIONS_MENU_VIEW_CONFIG, 0, "View Current Configuration")
+    		.setIcon(R.drawable.ic_menu_compose);
+    	menu.add(0, OPTIONS_MENU_VIEW_HELP, 0, "Help")
+    		.setIcon(android.R.drawable.ic_menu_help);
+    	return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch(item.getItemId()) {
+    	case OPTIONS_MENU_VIEW_CONFIG:
+    		Dialog dlgAbout = new Dialog(this);
+    		dlgAbout.setTitle(R.string.view_config);
+    		dlgAbout.setContentView(R.layout.view_config_dlg);
+    		dlgAbout.setCancelable(true);
+    		
+    		final TextView config_text = (TextView)dlgAbout.findViewById(R.id.view_config_dlg_text);
+    		config_text.setText(ConfigManager.getHumanReadable(CWiiDConfig.mAutoPreset.getConfig()));
+    		
+    		dlgAbout.show();
+    		return true;
+    	case OPTIONS_MENU_VIEW_HELP:
+    		Dialog dlgHelp = new Dialog(this);
+    		dlgHelp.setTitle(R.string.help);
+    		dlgHelp.setContentView(R.layout.help_dlg);
+    		dlgHelp.setCancelable(true);
+    		
+    		final ImageView help_image = (ImageView)dlgHelp.findViewById(R.id.help_dlg_image);
+    		help_image.setImageResource(android.R.drawable.ic_menu_help);
+    		
+    		dlgHelp.show();
+    		return true;
+    	}
+    	
+    	return false;
+    }
 }

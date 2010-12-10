@@ -3,13 +3,12 @@ package org.cvpcs.android.cwiidconfig.config;
 import android.util.Base64;
 import android.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.StringWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -248,7 +247,7 @@ public class ConfigManager {
 	public static final String KEYSYM_BATTERY = "KEY_BATTERY";
 	public static final String KEYSYM_UNKNOWN = "KEY_UNKNOWN";
 	
-	public static final ArrayList<CharSequence> ANDROID_KEYS = new ArrayList<CharSequence>();
+	public static final ArrayList<String> ANDROID_KEYS = new ArrayList<String>();
 	
 	static {
 		// LETTERS
@@ -350,6 +349,24 @@ public class ConfigManager {
 			return false;
 		}
 		return true;
+	}
+	
+	public static String getHumanReadable(Config config) {
+		if(config == null) {
+			return "";
+		}
+		
+		BufferedWriter bw;
+		StringWriter sw = new StringWriter();
+		try {
+			bw = new BufferedWriter(sw);
+			config.saveHumanReadable(bw);
+			bw.close();
+		} catch (IOException e) {
+			return "";
+		}
+		
+		return sw.toString();
 	}
 	
 	/**

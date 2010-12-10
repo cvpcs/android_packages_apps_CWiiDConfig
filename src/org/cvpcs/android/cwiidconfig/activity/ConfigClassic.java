@@ -2,6 +2,7 @@ package org.cvpcs.android.cwiidconfig.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,19 +14,22 @@ import java.util.ArrayList;
 import org.cvpcs.android.cwiidconfig.R;
 import org.cvpcs.android.cwiidconfig.config.ConfigManager;
 import org.cvpcs.android.cwiidconfig.config.ClassicController;
+import org.cvpcs.android.cwiidconfig.config.Device;
 
 public class ConfigClassic extends Activity {
+	private static final String TAG = "CWiidConfig/ConfigClassic";
+	
 	private static final int BUTTON_ALPHA = 0x66;
 	
-	private static final ArrayList<CharSequence> ANDROID_KEYS = new ArrayList<CharSequence>();
+	private static final ArrayList<String> ANDROID_KEYS = new ArrayList<String>();
 	
 	static {
 		ANDROID_KEYS.add("[ Unmapped ]");
 		ANDROID_KEYS.addAll(ConfigManager.ANDROID_KEYS);
 	}
 	
-	private ArrayAdapter<CharSequence> mWiiAdapter;
-	private ArrayAdapter<CharSequence> mKeyAdapter;
+	private ArrayAdapter<String> mWiiAdapter;
+	private ArrayAdapter<String> mKeyAdapter;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -36,26 +40,32 @@ public class ConfigClassic extends Activity {
 		final Spinner wii_spinner = (Spinner)findViewById(R.id.config_classic_wiibutton);
 		final Spinner key_spinner = (Spinner)findViewById(R.id.config_classic_keybutton);
 		
-		mWiiAdapter = new ArrayAdapter<CharSequence>(this, R.layout.sexy_combo, ClassicController.CLASSIC_BUTTONS);
+		mWiiAdapter = new ArrayAdapter<String>(this, R.layout.sexy_combo, ClassicController.BUTTONS);
 		mWiiAdapter.setDropDownViewResource(R.layout.sexy_combo_dropdown);
 		wii_spinner.setAdapter(mWiiAdapter);
 		wii_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
-				String button = ClassicController.CLASSIC_BUTTONS.get(position).toString();
+				String button = ClassicController.BUTTONS.get(position).toString();
 				
 				setImageButton(button);
 				
 				// do we have a config
-				ClassicController classic = CWiiDConfig.mAutoPreset.getConfig().getClassicController();
-				int cursym = classic.getButton(button);
+				Device classic = CWiiDConfig.mAutoPreset.getConfig().getDevice(ClassicController.NAME);
+				
+				if(classic == null) {
+					Log.e(TAG, "Classic controller device not found!");
+					return;
+				}
+				
+				Integer cursym = classic.getButton(button);
 				
 				boolean clearConfig = true;
 				
-				if(cursym > 0) {
+				if(cursym != null) {
 					for(int i = 0; i < ANDROID_KEYS.size(); i++) {
 						String key = ANDROID_KEYS.get(i).toString();
-						if(cursym == ConfigManager.convertHRToKeySym(key)) {
+						if(cursym.equals(Integer.valueOf(ConfigManager.convertHRToKeySym(key)))) {
 							key_spinner.setSelection(i);
 							clearConfig = false;
 							break;
@@ -73,21 +83,21 @@ public class ConfigClassic extends Activity {
 			}
 		});
 		
-		mKeyAdapter = new ArrayAdapter<CharSequence>(this, R.layout.sexy_combo, ANDROID_KEYS);
+		mKeyAdapter = new ArrayAdapter<String>(this, R.layout.sexy_combo, ANDROID_KEYS);
 		mKeyAdapter.setDropDownViewResource(R.layout.sexy_combo_dropdown);
 		key_spinner.setAdapter(mKeyAdapter);
 		key_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
 				setConfig(
-						ClassicController.CLASSIC_BUTTONS.get(wii_spinner.getSelectedItemPosition()).toString(),
+						ClassicController.BUTTONS.get(wii_spinner.getSelectedItemPosition()).toString(),
 						ANDROID_KEYS.get(position).toString()
 						);
 			}
 	
 			public void onNothingSelected(AdapterView<?> parent) {
 				setConfig(
-						ClassicController.CLASSIC_BUTTONS.get(wii_spinner.getSelectedItemPosition()).toString(),
+						ClassicController.BUTTONS.get(wii_spinner.getSelectedItemPosition()).toString(),
 						ANDROID_KEYS.get(0).toString()
 						);
 			}
@@ -97,10 +107,17 @@ public class ConfigClassic extends Activity {
 	private void setConfig(String wiiButton, String keyButton) {
 		int keysym = ConfigManager.convertHRToKeySym(keyButton);
 		
+		Device classic = CWiiDConfig.mAutoPreset.getConfig().getDevice(ClassicController.NAME);
+		
+		if(classic == null) {
+			Log.e(TAG, "Classic controller device not found!");
+			return;
+		}
+		
 		if(keysym > 0) {
-			CWiiDConfig.mAutoPreset.getConfig().getClassicController().setButton(wiiButton, keysym);
+			classic.setButton(wiiButton, Integer.valueOf(keysym));
 		} else {
-			CWiiDConfig.mAutoPreset.getConfig().getClassicController().setButton(wiiButton, 0);
+			classic.setButton(wiiButton, null);
 		}
 		
 		CWiiDConfig.mAutoPreset.save();
@@ -111,35 +128,35 @@ public class ConfigClassic extends Activity {
 			button = "";
 		}
 		
-		if(button.equals(ClassicController.CLASSIC_BUTTON_UP)) {
+		if(button.equals(ClassicController.BUTTON_UP)) {
 			setImageButton(R.drawable.classic_button_up);
-		} else if(button.equals(ClassicController.CLASSIC_BUTTON_LEFT)) {
+		} else if(button.equals(ClassicController.BUTTON_LEFT)) {
 			setImageButton(R.drawable.classic_button_left);
-		} else if(button.equals(ClassicController.CLASSIC_BUTTON_RIGHT)) {
+		} else if(button.equals(ClassicController.BUTTON_RIGHT)) {
 			setImageButton(R.drawable.classic_button_right);
-		} else if(button.equals(ClassicController.CLASSIC_BUTTON_DOWN)) {
+		} else if(button.equals(ClassicController.BUTTON_DOWN)) {
 			setImageButton(R.drawable.classic_button_down);
-		} else if(button.equals(ClassicController.CLASSIC_BUTTON_A)) {
+		} else if(button.equals(ClassicController.BUTTON_A)) {
 			setImageButton(R.drawable.classic_button_a);
-		} else if(button.equals(ClassicController.CLASSIC_BUTTON_B)) {
+		} else if(button.equals(ClassicController.BUTTON_B)) {
 			setImageButton(R.drawable.classic_button_b);
-		} else if(button.equals(ClassicController.CLASSIC_BUTTON_X)) {
+		} else if(button.equals(ClassicController.BUTTON_X)) {
 			setImageButton(R.drawable.classic_button_x);
-		} else if(button.equals(ClassicController.CLASSIC_BUTTON_Y)) {
+		} else if(button.equals(ClassicController.BUTTON_Y)) {
 			setImageButton(R.drawable.classic_button_y);
-		} else if(button.equals(ClassicController.CLASSIC_BUTTON_L)) {
+		} else if(button.equals(ClassicController.BUTTON_L)) {
 			setImageButton(R.drawable.classic_button_l);
-		} else if(button.equals(ClassicController.CLASSIC_BUTTON_R)) {
+		} else if(button.equals(ClassicController.BUTTON_R)) {
 			setImageButton(R.drawable.classic_button_r);
-		} else if(button.equals(ClassicController.CLASSIC_BUTTON_ZL)) {
+		} else if(button.equals(ClassicController.BUTTON_ZL)) {
 			setImageButton(R.drawable.classic_button_zl);
-		} else if(button.equals(ClassicController.CLASSIC_BUTTON_ZR)) {
+		} else if(button.equals(ClassicController.BUTTON_ZR)) {
 			setImageButton(R.drawable.classic_button_zr);
-		} else if(button.equals(ClassicController.CLASSIC_BUTTON_PLUS)) {
+		} else if(button.equals(ClassicController.BUTTON_PLUS)) {
 			setImageButton(R.drawable.classic_button_plus);
-		} else if(button.equals(ClassicController.CLASSIC_BUTTON_HOME)) {
+		} else if(button.equals(ClassicController.BUTTON_HOME)) {
 			setImageButton(R.drawable.classic_button_home);
-		} else if(button.equals(ClassicController.CLASSIC_BUTTON_MINUS)) {
+		} else if(button.equals(ClassicController.BUTTON_MINUS)) {
 			setImageButton(R.drawable.classic_button_minus);
 		} else {
 			setImageButton();

@@ -2,6 +2,7 @@ package org.cvpcs.android.cwiidconfig.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,20 +14,23 @@ import java.util.ArrayList;
 
 import org.cvpcs.android.cwiidconfig.R;
 import org.cvpcs.android.cwiidconfig.config.ConfigManager;
+import org.cvpcs.android.cwiidconfig.config.Device;
 import org.cvpcs.android.cwiidconfig.config.Wiimote;
 
 public class ConfigWiimote extends Activity {
+	private static final String TAG = "CWiiDConfig/ConfigWiimote";
+	
 	private static final int BUTTON_ALPHA = 0x66;
 	
-	private static final ArrayList<CharSequence> ANDROID_KEYS = new ArrayList<CharSequence>();
+	private static final ArrayList<String> ANDROID_KEYS = new ArrayList<String>();
 	
 	static {
 		ANDROID_KEYS.add("[ Unmapped ]");
 		ANDROID_KEYS.addAll(ConfigManager.ANDROID_KEYS);
 	}
 
-	private ArrayAdapter<CharSequence> mWiiAdapter;
-	private ArrayAdapter<CharSequence> mKeyAdapter;
+	private ArrayAdapter<String> mWiiAdapter;
+	private ArrayAdapter<String> mKeyAdapter;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -37,26 +41,32 @@ public class ConfigWiimote extends Activity {
 		final Spinner wii_spinner = (Spinner)findViewById(R.id.config_wiimote_wiibutton);
 		final Spinner key_spinner = (Spinner)findViewById(R.id.config_wiimote_keybutton);
 		
-		mWiiAdapter = new ArrayAdapter<CharSequence>(this, R.layout.sexy_combo, Wiimote.WIIMOTE_BUTTONS);
+		mWiiAdapter = new ArrayAdapter<String>(this, R.layout.sexy_combo, Wiimote.BUTTONS);
 		mWiiAdapter.setDropDownViewResource(R.layout.sexy_combo_dropdown);
 		wii_spinner.setAdapter(mWiiAdapter);
 		wii_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
-				String button = Wiimote.WIIMOTE_BUTTONS.get(position).toString();
+				String button = Wiimote.BUTTONS.get(position).toString();
 				
 				setImageButton(button);
 				
 				// do we have a config
-				Wiimote wiimote = CWiiDConfig.mAutoPreset.getConfig().getWiimote();
-				int cursym = wiimote.getButton(button);
+				Device wiimote = CWiiDConfig.mAutoPreset.getConfig().getDevice(Wiimote.NAME);
+				
+				if(wiimote == null) {
+					Log.e(TAG, "Wiimote device not found!");
+					return;
+				}
+				
+				Integer cursym = wiimote.getButton(button);
 				
 				boolean clearConfig = true;
 				
-				if(cursym > 0) {
+				if(cursym != null) {
 					for(int i = 0; i < ANDROID_KEYS.size(); i++) {
 						String key = ANDROID_KEYS.get(i).toString();
-						if(cursym == ConfigManager.convertHRToKeySym(key)) {
+						if(cursym.equals(Integer.valueOf(ConfigManager.convertHRToKeySym(key)))) {
 							key_spinner.setSelection(i);
 							clearConfig = false;
 							break;
@@ -74,21 +84,21 @@ public class ConfigWiimote extends Activity {
 			}
 		});
 		
-		mKeyAdapter = new ArrayAdapter<CharSequence>(this, R.layout.sexy_combo, ANDROID_KEYS);
+		mKeyAdapter = new ArrayAdapter<String>(this, R.layout.sexy_combo, ANDROID_KEYS);
 		mKeyAdapter.setDropDownViewResource(R.layout.sexy_combo_dropdown);
 		key_spinner.setAdapter(mKeyAdapter);
 		key_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
 				setConfig(
-						Wiimote.WIIMOTE_BUTTONS.get(wii_spinner.getSelectedItemPosition()).toString(),
+						Wiimote.BUTTONS.get(wii_spinner.getSelectedItemPosition()).toString(),
 						ANDROID_KEYS.get(position).toString()
 						);
 			}
 	
 			public void onNothingSelected(AdapterView<?> parent) {
 				setConfig(
-						Wiimote.WIIMOTE_BUTTONS.get(wii_spinner.getSelectedItemPosition()).toString(),
+						Wiimote.BUTTONS.get(wii_spinner.getSelectedItemPosition()).toString(),
 						ANDROID_KEYS.get(0).toString()
 						);
 			}
@@ -97,11 +107,18 @@ public class ConfigWiimote extends Activity {
 	
 	private void setConfig(String wiiButton, String keyButton) {
 		int keysym = ConfigManager.convertHRToKeySym(keyButton);
+
+		Device wiimote = CWiiDConfig.mAutoPreset.getConfig().getDevice(Wiimote.NAME);
+		
+		if(wiimote == null) {
+			Log.e(TAG, "Wiimote device not found!");
+			return;
+		}
 		
 		if(keysym > 0) {
-			CWiiDConfig.mAutoPreset.getConfig().getWiimote().setButton(wiiButton, keysym);
+			wiimote.setButton(wiiButton, Integer.valueOf(keysym));
 		} else {
-			CWiiDConfig.mAutoPreset.getConfig().getWiimote().setButton(wiiButton, 0);
+			wiimote.setButton(wiiButton, null);
 		}
 		
 		CWiiDConfig.mAutoPreset.save();
@@ -112,27 +129,27 @@ public class ConfigWiimote extends Activity {
 			button = "";
 		}
 		
-		if(button.equals(Wiimote.WIIMOTE_BUTTON_UP)) {
+		if(button.equals(Wiimote.BUTTON_UP)) {
 			setImageButton(1, R.drawable.wiimote_button_up);
-		} else if(button.equals(Wiimote.WIIMOTE_BUTTON_LEFT)) {
+		} else if(button.equals(Wiimote.BUTTON_LEFT)) {
 			setImageButton(1, R.drawable.wiimote_button_left);
-		} else if(button.equals(Wiimote.WIIMOTE_BUTTON_RIGHT)) {
+		} else if(button.equals(Wiimote.BUTTON_RIGHT)) {
 			setImageButton(1, R.drawable.wiimote_button_right);
-		} else if(button.equals(Wiimote.WIIMOTE_BUTTON_DOWN)) {
+		} else if(button.equals(Wiimote.BUTTON_DOWN)) {
 			setImageButton(1, R.drawable.wiimote_button_down);
-		} else if(button.equals(Wiimote.WIIMOTE_BUTTON_A)) {
+		} else if(button.equals(Wiimote.BUTTON_A)) {
 			setImageButton(1, R.drawable.wiimote_button_a);
-		} else if(button.equals(Wiimote.WIIMOTE_BUTTON_B)) {
+		} else if(button.equals(Wiimote.BUTTON_B)) {
 			setImageButton(-1, R.drawable.wiimote_button_b);
-		} else if(button.equals(Wiimote.WIIMOTE_BUTTON_MINUS)) {
+		} else if(button.equals(Wiimote.BUTTON_MINUS)) {
 			setImageButton(1, R.drawable.wiimote_button_minus);
-		} else if(button.equals(Wiimote.WIIMOTE_BUTTON_HOME)) {
+		} else if(button.equals(Wiimote.BUTTON_HOME)) {
 			setImageButton(1, R.drawable.wiimote_button_home);
-		} else if(button.equals(Wiimote.WIIMOTE_BUTTON_PLUS)) {
+		} else if(button.equals(Wiimote.BUTTON_PLUS)) {
 			setImageButton(1, R.drawable.wiimote_button_plus);
-		} else if(button.equals(Wiimote.WIIMOTE_BUTTON_1)) {
+		} else if(button.equals(Wiimote.BUTTON_1)) {
 			setImageButton(1, R.drawable.wiimote_button_1);
-		} else if(button.equals(Wiimote.WIIMOTE_BUTTON_2)) {
+		} else if(button.equals(Wiimote.BUTTON_2)) {
 			setImageButton(1, R.drawable.wiimote_button_2);
 		} else {
 			setImageButton();

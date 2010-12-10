@@ -16,8 +16,7 @@
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:fadingEdge="none"
-		android:divider="#BBBBBB"
-		android:dividerHeight="1dip"
+		android:divider="@android:color/transparent"
 		android:scrollbarAlwaysDrawVerticalTrack="true" />
 
 </FrameLayout>
