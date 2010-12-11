@@ -7,7 +7,7 @@ public class ClassicController extends Device {
 	public static final String NAME = "Classic";
 	private static String PLUGIN_STICK2BTN = "Plugin.classic_stick2btn";
 	private static final Pattern PATTERN = Pattern.compile(
-			"((classic)\\.[a-z0-9_]+)[ \t]*=[ \t]*([a-z0-9_]+)",
+			"((classic|plugin.classic_stick2btn)\\.[a-z0-9_]+)[ \t]*=[ \t]*([a-z0-9_]+)",
 			Pattern.CASE_INSENSITIVE);
 
 	public static final ArrayList<String> BUTTONS = new ArrayList<String>();
