@@ -1,211 +1,46 @@
 package org.cvpcs.android.cwiidconfig.activity;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.Spinner;
-
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.cvpcs.android.cwiidconfig.R;
-import org.cvpcs.android.cwiidconfig.config.ConfigManager;
 import org.cvpcs.android.cwiidconfig.config.ClassicController;
-import org.cvpcs.android.cwiidconfig.config.Device;
 
-public class ConfigClassic extends Activity {
-	private static final String TAG = "CWiidConfig/ConfigClassic";
-	
-	private static final int BUTTON_ALPHA = 0x66;
-	
-	private static final ArrayList<String> ANDROID_KEYS = new ArrayList<String>();
+public class ConfigClassic extends ConfigDevice {
+	private static final Integer DEVICE_IMAGE_RES_ID = Integer.valueOf(R.drawable.classic_front);
+	private static final HashMap<String, Integer> DEVICE_BUTTON_IMAGE_MAP = new HashMap<String, Integer>();
 	
 	static {
-		ANDROID_KEYS.add("[ Unmapped ]");
-		ANDROID_KEYS.addAll(ConfigManager.ANDROID_KEYS);
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_UP,       Integer.valueOf(R.drawable.classic_button_up));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_LEFT,     Integer.valueOf(R.drawable.classic_button_left));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_RIGHT,    Integer.valueOf(R.drawable.classic_button_right));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_DOWN,     Integer.valueOf(R.drawable.classic_button_down));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_A,        Integer.valueOf(R.drawable.classic_button_a));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_B,        Integer.valueOf(R.drawable.classic_button_b));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_X,        Integer.valueOf(R.drawable.classic_button_x));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_Y,        Integer.valueOf(R.drawable.classic_button_y));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_L,        Integer.valueOf(R.drawable.classic_button_l));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_R,        Integer.valueOf(R.drawable.classic_button_r));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_ZL,       Integer.valueOf(R.drawable.classic_button_zl));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_ZR,       Integer.valueOf(R.drawable.classic_button_zr));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_PLUS,     Integer.valueOf(R.drawable.classic_button_plus));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_HOME,     Integer.valueOf(R.drawable.classic_button_home));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_MINUS,    Integer.valueOf(R.drawable.classic_button_minus));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_LS_UP,    Integer.valueOf(R.drawable.classic_button_lstick_up));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_LS_LEFT,  Integer.valueOf(R.drawable.classic_button_lstick_left));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_LS_RIGHT, Integer.valueOf(R.drawable.classic_button_lstick_right));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_LS_DOWN,  Integer.valueOf(R.drawable.classic_button_lstick_down));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_RS_UP,    Integer.valueOf(R.drawable.classic_button_rstick_up));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_RS_LEFT,  Integer.valueOf(R.drawable.classic_button_rstick_left));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_RS_RIGHT, Integer.valueOf(R.drawable.classic_button_rstick_right));
+		DEVICE_BUTTON_IMAGE_MAP.put(ClassicController.BUTTON_RS_DOWN,  Integer.valueOf(R.drawable.classic_button_rstick_down));
 	}
 	
-	private ArrayAdapter<String> mWiiAdapter;
-	private ArrayAdapter<String> mKeyAdapter;
-	
-	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.config_classic);
+	public ConfigClassic() {
+		super();
 		
-		final Spinner wii_spinner = (Spinner)findViewById(R.id.config_classic_wiibutton);
-		final Spinner key_spinner = (Spinner)findViewById(R.id.config_classic_keybutton);
-		
-		mWiiAdapter = new ArrayAdapter<String>(this, R.layout.sexy_combo, ClassicController.BUTTONS);
-		mWiiAdapter.setDropDownViewResource(R.layout.sexy_combo_dropdown);
-		wii_spinner.setAdapter(mWiiAdapter);
-		wii_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				String button = ClassicController.BUTTONS.get(position).toString();
-				
-				setImageButton(button);
-				
-				// do we have a config
-				Device classic = CWiiDConfig.mAutoPreset.getConfig().getDevice(ClassicController.NAME);
-				
-				if(classic == null) {
-					Log.e(TAG, "Classic controller device not found!");
-					return;
-				}
-				
-				Integer cursym = classic.getButton(button);
-				
-				boolean clearConfig = true;
-				
-				if(cursym != null) {
-					for(int i = 0; i < ANDROID_KEYS.size(); i++) {
-						String key = ANDROID_KEYS.get(i).toString();
-						
-						Integer sym = ConfigManager.convertHRToKeySym(key);
-						
-						if(sym != null && cursym.equals(sym)) {
-							key_spinner.setSelection(i);
-							clearConfig = false;
-							break;
-						}
-					}
-				}
-				
-				if(clearConfig) {
-					key_spinner.setSelection(0);
-				}
-			}
-
-			public void onNothingSelected(AdapterView<?> parent) {
-				setImageButton(null);
-			}
-		});
-		
-		mKeyAdapter = new ArrayAdapter<String>(this, R.layout.sexy_combo, ANDROID_KEYS);
-		mKeyAdapter.setDropDownViewResource(R.layout.sexy_combo_dropdown);
-		key_spinner.setAdapter(mKeyAdapter);
-		key_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-			public void onItemSelected(AdapterView<?> parent, View view,
-					int position, long id) {
-				setConfig(
-						ClassicController.BUTTONS.get(wii_spinner.getSelectedItemPosition()).toString(),
-						ANDROID_KEYS.get(position).toString()
-						);
-			}
-	
-			public void onNothingSelected(AdapterView<?> parent) {
-				setConfig(
-						ClassicController.BUTTONS.get(wii_spinner.getSelectedItemPosition()).toString(),
-						ANDROID_KEYS.get(0).toString()
-						);
-			}
-		});
-	}
-	
-	@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-		menu = CWiiDConfig.createGlobalOptionsMenu(menu);
-    	return true;
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	return CWiiDConfig.handleGlobalOptionsMenu(this, item, R.drawable.help_configdevice);
-    }
-	
-	private void setConfig(String wiiButton, String keyButton) {
-		Integer keysym = ConfigManager.convertHRToKeySym(keyButton);
-		
-		Device classic = CWiiDConfig.mAutoPreset.getConfig().getDevice(ClassicController.NAME);
-		
-		if(classic == null) {
-			Log.e(TAG, "Classic controller device not found!");
-			return;
-		}
-		
-		classic.setButton(wiiButton, keysym);
-		
-		CWiiDConfig.mAutoPreset.save();
-	}
-	
-	private void setImageButton(String button) {
-		if(button == null) {
-			button = "";
-		}
-		
-		if(button.equals(ClassicController.BUTTON_UP)) {
-			setImageButton(R.drawable.classic_button_up);
-		} else if(button.equals(ClassicController.BUTTON_LEFT)) {
-			setImageButton(R.drawable.classic_button_left);
-		} else if(button.equals(ClassicController.BUTTON_RIGHT)) {
-			setImageButton(R.drawable.classic_button_right);
-		} else if(button.equals(ClassicController.BUTTON_DOWN)) {
-			setImageButton(R.drawable.classic_button_down);
-		} else if(button.equals(ClassicController.BUTTON_A)) {
-			setImageButton(R.drawable.classic_button_a);
-		} else if(button.equals(ClassicController.BUTTON_B)) {
-			setImageButton(R.drawable.classic_button_b);
-		} else if(button.equals(ClassicController.BUTTON_X)) {
-			setImageButton(R.drawable.classic_button_x);
-		} else if(button.equals(ClassicController.BUTTON_Y)) {
-			setImageButton(R.drawable.classic_button_y);
-		} else if(button.equals(ClassicController.BUTTON_L)) {
-			setImageButton(R.drawable.classic_button_l);
-		} else if(button.equals(ClassicController.BUTTON_R)) {
-			setImageButton(R.drawable.classic_button_r);
-		} else if(button.equals(ClassicController.BUTTON_ZL)) {
-			setImageButton(R.drawable.classic_button_zl);
-		} else if(button.equals(ClassicController.BUTTON_ZR)) {
-			setImageButton(R.drawable.classic_button_zr);
-		} else if(button.equals(ClassicController.BUTTON_PLUS)) {
-			setImageButton(R.drawable.classic_button_plus);
-		} else if(button.equals(ClassicController.BUTTON_HOME)) {
-			setImageButton(R.drawable.classic_button_home);
-		} else if(button.equals(ClassicController.BUTTON_MINUS)) {
-			setImageButton(R.drawable.classic_button_minus);
-		} else if(button.equals(ClassicController.BUTTON_LS_UP)) {
-			setImageButton(R.drawable.classic_button_lstick_up);
-		} else if(button.equals(ClassicController.BUTTON_LS_LEFT)) {
-			setImageButton(R.drawable.classic_button_lstick_left);
-		} else if(button.equals(ClassicController.BUTTON_LS_RIGHT)) {
-			setImageButton(R.drawable.classic_button_lstick_right);
-		} else if(button.equals(ClassicController.BUTTON_LS_DOWN)) {
-			setImageButton(R.drawable.classic_button_lstick_down);
-		} else if(button.equals(ClassicController.BUTTON_RS_UP)) {
-			setImageButton(R.drawable.classic_button_rstick_up);
-		} else if(button.equals(ClassicController.BUTTON_RS_LEFT)) {
-			setImageButton(R.drawable.classic_button_rstick_left);
-		} else if(button.equals(ClassicController.BUTTON_RS_RIGHT)) {
-			setImageButton(R.drawable.classic_button_rstick_right);
-		} else if(button.equals(ClassicController.BUTTON_RS_DOWN)) {
-			setImageButton(R.drawable.classic_button_rstick_down);
-		} else {
-			setImageButton();
-		}
-	}
-	
-	private void setImageButton() {
-		final ImageView classic_front_button = (ImageView)findViewById(R.id.config_classic_front_view_button);
-		
-		classic_front_button.setVisibility(View.GONE);
-	}
-	
-	private void setImageButton(int resId) {
-		setImageButton(resId, BUTTON_ALPHA);
-	}
-	
-	private void setImageButton(int resId, int alpha) {
-		final ImageView classic_front_button = (ImageView)findViewById(R.id.config_classic_front_view_button);
-		
-		classic_front_button.setImageResource(resId);
-		classic_front_button.setAlpha(alpha);
-		classic_front_button.setVisibility(View.VISIBLE);
+		mDeviceName = ClassicController.NAME;
+		mDeviceImageResourceId = DEVICE_IMAGE_RES_ID;
+		mDeviceButtons = ClassicController.BUTTONS;
+		mDeviceButtonImageMap = DEVICE_BUTTON_IMAGE_MAP;
 	}
 }

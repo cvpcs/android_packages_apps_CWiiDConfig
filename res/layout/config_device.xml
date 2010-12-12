@@ -4,10 +4,10 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/config_classic_layout"
+	android:id="@+id/config_device_layout"
 	android:background="#FFFFFF">
 
-	<TextView android:id="@+id/config_classic_select_button"
+	<TextView android:id="@+id/config_device_select_button"
 		android:text="@string/select_button"
 		android:textColor="#555555"
 		android:textSize="20dip"
@@ -18,7 +18,7 @@
 		android:layout_marginTop="10dip" />
 		
 	
-	<LinearLayout android:id="@+id/config_classic_select_layout"
+	<LinearLayout android:id="@+id/config_device_select_layout"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_alignParentBottom="true"
@@ -26,17 +26,17 @@
 			android:layout_centerHorizontal="true"
 			android:orientation="horizontal">
 			
-		<LinearLayout android:id="@+id/config_classic_select_button_layout"
+		<LinearLayout android:id="@+id/config_device_select_button_layout"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:orientation="vertical">
 			
-			<Spinner android:id="@+id/config_classic_wiibutton"
+			<Spinner android:id="@+id/config_device_wiibutton"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:prompt="@string/select_button_prompt" />
 					
-			<TextView android:id="@+id/config_classic_wiibutton_txt"
+			<TextView android:id="@+id/config_device_wiibutton_txt"
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
 					android:gravity="center"
@@ -46,17 +46,17 @@
 					
 		</LinearLayout>
 				
-		<LinearLayout android:id="@+id/config_classic_select_key_layout"
+		<LinearLayout android:id="@+id/config_device_select_key_layout"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:orientation="vertical">
 			
-			<Spinner android:id="@+id/config_classic_keybutton"
+			<Spinner android:id="@+id/config_device_keybutton"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:prompt="@string/select_key_prompt" />
 		
-			<TextView android:id="@+id/config_classic_keybutton_txt"
+			<TextView android:id="@+id/config_device_keybutton_txt"
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
 					android:gravity="center"
@@ -68,25 +68,24 @@
 		
 	</LinearLayout>
 
-	<LinearLayout android:id="@+id/config_classic_image_layout"
-			android:layout_below="@id/config_classic_select_button"
-			android:layout_above="@id/config_classic_select_layout"
+	<LinearLayout android:id="@+id/config_device_image_layout"
+			android:layout_below="@id/config_device_select_button"
+			android:layout_above="@id/config_device_select_layout"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerHorizontal="true"
 			android:orientation="horizontal"
 			android:layout_margin="10dip">
 	
-		<RelativeLayout android:id="@+id/config_classic_image_front_layout"
+		<RelativeLayout android:id="@+id/config_device_image_secondary_layout"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content">
 
-			<ImageView android:id="@+id/config_classic_front_view"
-				android:src="@drawable/classic_front"
+			<ImageView android:id="@+id/config_device_view"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" />
 				
-			<ImageView android:id="@+id/config_classic_front_view_button"
+			<ImageView android:id="@+id/config_device_view_button"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:visibility="gone" />
