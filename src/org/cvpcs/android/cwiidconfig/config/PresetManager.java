@@ -12,6 +12,11 @@ public class PresetManager {
 	public static final File SYSTEM_PRESET_DIRECTORY = new File("/system/etc/cwiid/wminput");
 	// directory where user presets are stored
 	public static final File USER_PRESET_DIRECTORY = new File("/sdcard/.cwiid/wminput");
+
+	static {
+		// ensure the directory exists
+		USER_PRESET_DIRECTORY.mkdirs();
+	}
 	
 	// directories we know cwiid will scan for config files
 	private static File[] PRESET_SCAN_DIRECTORIES = {

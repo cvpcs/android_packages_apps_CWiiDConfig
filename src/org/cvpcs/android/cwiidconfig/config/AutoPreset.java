@@ -3,7 +3,8 @@ package org.cvpcs.android.cwiidconfig.config;
 import java.io.File;
 
 public class AutoPreset extends Preset {
-	private static final File AUTO_PRESET_FILE = new File("/sdcard/.cwiid/wminput/.autopreset");
+	private static final File AUTO_PRESET_FILE = new File(
+			PresetManager.USER_PRESET_DIRECTORY, ".autopreset");
 	private static AutoPreset AUTO_PRESET = null;
 	
 	private String mLoadedName = "";
